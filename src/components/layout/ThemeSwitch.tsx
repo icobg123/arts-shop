@@ -26,7 +26,7 @@ export function ThemeSwitch({ className }: ThemeSwitchProps) {
   const isLightTheme = resolvedTheme === "light";
 
   const handleThemeToggle = () => {
-    setTheme(isLightTheme ? "forest" : "light");
+    setTheme(isLightTheme ? "night" : "light");
   };
 
   return (
@@ -36,14 +36,16 @@ export function ThemeSwitch({ className }: ThemeSwitchProps) {
       {/* this hidden checkbox controls the state */}
       <input
         type="checkbox"
-        checked={isLightTheme}
+        checked={!isLightTheme}
         onChange={handleThemeToggle}
+        aria-label="Toggle theme"
       />
 
-      <Sun size={ICON_SIZE} className="swap-on" />
+      {/* sun icon - shown in dark mode */}
+      <Sun size={ICON_SIZE} className="swap-off" />
 
-      {/* moon icon */}
-      <Moon size={ICON_SIZE} className="swap-off" />
+      {/* moon icon - shown in light mode */}
+      <Moon size={ICON_SIZE} className="swap-on" />
     </label>
   );
 }

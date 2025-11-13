@@ -1,13 +1,6 @@
-@layer theme, base, clerk, components, utilities;
 @import "tailwindcss";
-
 @plugin "daisyui" {
-    themes: light --default, forest --prefersdark;
-}
-@plugin "daisyui/theme" {
-    name: "light";
-    default: true;
-    --radius-selector: 1rem;
-    --radius-field: 2rem;
-    --radius-box: 1rem;
+  /*themes: all;*/
+  themes: light --preferslight, night --default;
+
 }

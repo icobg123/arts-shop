@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "react-hot-toast";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+import Header from "@/components/layout/Header";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,19 +27,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning  data-theme="night">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        data-theme="forest"
-        suppressHydrationWarning
       >
         <ThemeProvider
           attribute="data-theme"
-          defaultTheme="forest"
+          defaultTheme="night"
           enableSystem={true}
           themes={[
             "night",
-            "cupcake",
+            "night",
             "forest",
             "synthwave",
             "retro",
@@ -55,6 +54,7 @@ export default function RootLayout({
           ]}
         >
           <NuqsAdapter>
+            <Header />
             {children}
             <Toaster position="bottom-right" />
           </NuqsAdapter>
