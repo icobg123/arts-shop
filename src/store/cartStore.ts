@@ -43,6 +43,7 @@ export const useCartStore = create<CartStore>()(
             quantity: Math.min(quantity, product.stock),
             stock: product.stock,
             discountPercentage: product.discountPercentage || 0,
+            category: product.category,
           };
           newItems = [...items, cartItem];
         }

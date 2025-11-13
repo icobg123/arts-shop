@@ -1,23 +1,28 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
+
 import { getProduct, getProducts } from "@/lib/api/products";
 import {
-  ProductBreadcrumb,
-  ProductImageGallery,
-  ProductRating,
-  ProductPrice,
-  ProductDetails,
-  ProductInfo,
   AddToCartForm,
-  ReviewSummary,
-  ReviewsList,
+  ProductBreadcrumb,
+  ProductDetails,
+  ProductImageGallery,
+  ProductInfo,
+  ProductPrice,
+  ProductRating,
   RelatedProducts,
+  ReviewsList,
+  ReviewSummary,
 } from "@/components/product";
+import { ReviewsSkeleton } from "@/components/skeletons/ReviewsSkeleton";
+import { RelatedProductsSkeleton } from "@/components/skeletons/RelatedProductsSkeleton";
 
 interface ProductPageProps {
-  params: {
-    id: string;
-  };
+  params: Promise<{
+    category: string;
+    productId: string;
+  }>;
 }
 
 /**
@@ -26,10 +31,10 @@ interface ProductPageProps {
 export async function generateMetadata({
   params,
 }: ProductPageProps): Promise<Metadata> {
-  const resolvedParams = await params;
+  const { productId } = await params;
 
   try {
-    const product = await getProduct(parseInt(resolvedParams.id));
+    const product = await getProduct(parseInt(productId));
 
     return {
       title: `${product.title} - Arts Consolidated`,
@@ -61,27 +66,37 @@ export async function generateMetadata({
     };
   }
 }
+
 export async function generateStaticParams() {
-  const response = await getProducts({limit:0});
+  const response = await getProducts({ limit: 0 });
 
   return response.products.map((product) => ({
-    id: product.id.toString(),
+    category: product.category,
+    productId: product.id.toString(),
   }));
 }
+
 /**
  * Product detail page component
  */
 export default async function ProductPage({ params }: ProductPageProps) {
-  const resolvedParams = await params;
+  const { category, productId } = await params;
   let product;
 
   try {
-    product = await getProduct(parseInt(resolvedParams.id));
+    product = await getProduct(parseInt(productId));
+
+    // Verify the category matches
+    if (product.category !== category) {
+      notFound();
+    }
   } catch {
     notFound();
+
   }
 
   return (
+
     <main className="container mx-auto px-4 py-8">
       <ProductBreadcrumb
         category={product.category}
@@ -94,13 +109,17 @@ export default async function ProductPage({ params }: ProductPageProps) {
           title={product.title}
           thumbnail={product.thumbnail}
           images={product.images}
+          productId={product.id}
         />
 
         {/* Right Column - Product Info */}
         <div className="space-y-6">
           {/* Brand Badge */}
           {product.brand && (
-            <div className="badge badge-primary" aria-label={`Brand: ${product.brand}`}>
+            <div
+              className="badge badge-primary"
+              aria-label={`Brand: ${product.brand}`}
+            >
               {product.brand}
             </div>
           )}
@@ -165,23 +184,35 @@ export default async function ProductPage({ params }: ProductPageProps) {
         </div>
       </article>
 
-      {/* Reviews Section */}
+       Reviews Section with Streaming
       {product.reviews && product.reviews.length > 0 && (
-        <section aria-labelledby="reviews-heading" className="mt-12 space-y-6">
-          <h2 id="reviews-heading" className="text-2xl font-bold">
-            Customer Reviews
-          </h2>
+        <Suspense fallback={<ReviewsSkeleton />}>
+          {/*<ViewTransition>*/}
+            <section aria-labelledby="reviews-heading" className="mt-12 space-y-6">
+              <h2 id="reviews-heading" className="text-2xl font-bold">
+                Customer Reviews
+              </h2>
 
-          {/* Review Summary with Rating Breakdown */}
-          <ReviewSummary reviews={product.reviews} averageRating={product.rating} />
+               Review Summary with Rating Breakdown
+              <ReviewSummary
+                reviews={product.reviews}
+                averageRating={product.rating}
+              />
 
-          {/* Reviews List with Filters and Pagination */}
-          <ReviewsList reviews={product.reviews} />
-        </section>
+               Reviews List with Filters and Pagination
+              <ReviewsList reviews={product.reviews} />
+            </section>
+          {/*</ViewTransition>*/}
+        </Suspense>
       )}
 
-      {/* Related Products Section using React 19 use() hook */}
-      <RelatedProducts category={product.category} excludeId={product.id} />
+      {/* Related Products Section with Streaming */}
+      <Suspense fallback={<RelatedProductsSkeleton />}>
+
+          <RelatedProducts category={product.category} excludeId={product.id} />
+
+      </Suspense>
     </main>
+
   );
 }

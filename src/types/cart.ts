@@ -12,6 +12,7 @@ export interface CartItem {
   quantity: number;
   stock: number;
   discountPercentage: number;
+  category: string;
 }
 
 export interface CartStore {

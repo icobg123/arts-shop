@@ -1,6 +1,7 @@
-import { use, Suspense } from "react";
+import React, { Suspense, use, unstable_ViewTransition as ViewTransition } from "react";
 import { Product } from "@/types/product";
-import { ProductCard } from "./ProductCard";
+import { ProductCard } from "@/components/product/ProductCard";
+
 
 interface RelatedProductsProps {
   category: string;
@@ -12,11 +13,11 @@ interface RelatedProductsProps {
  */
 async function fetchRelatedProducts(
   category: string,
-  excludeId: number
+  excludeId: number,
 ): Promise<Product[]> {
   const response = await fetch(
     `https://dummyjson.com/products/category/${category}?limit=6`,
-    { next: { revalidate: 3600 } }
+    { next: { revalidate: 3600 } },
   );
 
   if (!response.ok) {
@@ -32,9 +33,9 @@ async function fetchRelatedProducts(
  * This component unwraps the Promise automatically
  */
 function RelatedProductsContent({
-  category,
-  excludeId,
-}: RelatedProductsProps) {
+                                  category,
+                                  excludeId,
+                                }: RelatedProductsProps) {
   // React 19 feature: use() unwraps the Promise!
   const products = use(fetchRelatedProducts(category, excludeId));
 
@@ -83,16 +84,18 @@ function RelatedProductsSkeleton() {
  */
 export function RelatedProducts({ category, excludeId }: RelatedProductsProps) {
   return (
-    <section
-      aria-labelledby="related-products-heading"
-      className="mt-16"
-    >
-      <h2 id="related-products-heading" className="text-2xl font-bold mb-6">
-        You May Also Like
-      </h2>
-      <Suspense fallback={<RelatedProductsSkeleton />}>
-        <RelatedProductsContent category={category} excludeId={excludeId} />
-      </Suspense>
-    </section>
+    <ViewTransition>
+      <section
+        aria-labelledby="related-products-heading"
+        className="mt-16"
+      >
+        <h2 id="related-products-heading" className="text-2xl font-bold mb-6">
+          You May Also Like
+        </h2>
+        <Suspense fallback={<RelatedProductsSkeleton />}>
+          <RelatedProductsContent category={category} excludeId={excludeId} />
+        </Suspense>
+      </section>
+    </ViewTransition>
   );
 }

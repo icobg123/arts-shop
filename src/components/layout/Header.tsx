@@ -5,7 +5,7 @@ import { Menu, ChevronDown } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import CartIcon from "@/components/cart/CartIcon";
 import CartDropdown from "@/components/cart/CartDropdown";
-import { getCategories } from "@/lib/api/products";
+import { getCategories, getCategoryUrl } from "@/lib/api/products";
 import { ThemeSwitch } from "@/components/layout/ThemeSwitch";
 import { useCartStore } from "@/store/cartStore";
 
@@ -103,21 +103,36 @@ export default function Header() {
 
             {/* Categories Dropdown */}
             <li>
-              <details>
+              <details ref={useRef<HTMLDetailsElement>(null)}>
                 <summary>
                   Categories
                   <ChevronDown className="h-4 w-4 ml-1" />
                 </summary>
                 <ul className="bg-base-100 p-2 w-52 shadow-lg">
                   <li>
-                    <Link href="/products">All Products</Link>
+                    <Link
+                      href="/categories"
+                      onClick={(e) => {
+                        const details = (e.target as HTMLElement).closest('details');
+                        if (details) details.open = false;
+                      }}
+                    >
+                      All Categories
+                    </Link>
+                  </li>
+                  <li>
+                    <hr className="my-2" />
                   </li>
                   {categories.length > 0 ? (
                     categories.map((category) => (
                       <li key={category}>
                         <Link
-                          href={`/products?category=${encodeURIComponent(category)}`}
+                          href={getCategoryUrl(category)}
                           className="capitalize"
+                          onClick={(e) => {
+                            const details = (e.target as HTMLElement).closest('details');
+                            if (details) details.open = false;
+                          }}
                         >
                           {category.replace(/-/g, " ")}
                         </Link>
@@ -179,17 +194,25 @@ export default function Header() {
                 <ul>
                   <li>
                     <Link
-                      href="/products"
-                      onClick={() => setIsMobileMenuOpen(false)}
+                      href="/categories"
+                      onClick={(e) => {
+                        const details = (e.target as HTMLElement).closest('details');
+                        if (details) details.open = false;
+                        setIsMobileMenuOpen(false);
+                      }}
                     >
-                      All Products
+                      All Categories
                     </Link>
                   </li>
                   {categories.map((category) => (
                     <li key={category}>
                       <Link
-                        href={`/products?category=${encodeURIComponent(category)}`}
-                        onClick={() => setIsMobileMenuOpen(false)}
+                        href={getCategoryUrl(category)}
+                        onClick={(e) => {
+                          const details = (e.target as HTMLElement).closest('details');
+                          if (details) details.open = false;
+                          setIsMobileMenuOpen(false);
+                        }}
                         className="capitalize"
                       >
                         {category.replace(/-/g, " ")}

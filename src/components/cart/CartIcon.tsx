@@ -30,6 +30,7 @@ export default function CartIcon({ onClick, className = "" }: CartIconProps) {
       onClick={onClick}
       className={`btn btn-ghost btn-circle relative ${className}`}
       aria-label={`Shopping cart with ${totalItems} items`}
+      style={{ viewTransitionName: "cart-icon" }}
     >
       <ShoppingCart
         className={`h-6 w-6 ${pulse ? "animate-pulse" : ""}`}

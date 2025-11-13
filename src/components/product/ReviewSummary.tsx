@@ -35,7 +35,6 @@ export function ReviewSummary({
   return (
     <div className="card bg-base-200">
       <div className="card-body">
-        <h3 className="card-title">Customer Reviews</h3>
 
         <div className="flex flex-col md:flex-row gap-8 items-start md:items-center">
           {/* Overall Rating */}

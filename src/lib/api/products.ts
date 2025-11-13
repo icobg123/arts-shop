@@ -75,3 +75,24 @@ export async function getProductsByCategory(
   )}?limit=${limit}`;
   return fetchAPI(url, ProductListResponseSchema);
 }
+
+/**
+ * Generate product URL with category and product ID
+ *
+ * @param category - Category slug
+ * @param productId - Product ID
+ * @returns Product URL path
+ */
+export function getProductUrl(category: string, productId: number): string {
+  return `/products/${encodeURIComponent(category)}/${productId}`;
+}
+
+/**
+ * Get category URL
+ *
+ * @param category - Category slug
+ * @returns Category URL path
+ */
+export function getCategoryUrl(category: string): string {
+  return `/categories/${encodeURIComponent(category)}`;
+}

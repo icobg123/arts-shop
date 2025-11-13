@@ -1,38 +1,123 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { unstable_ViewTransition as ViewTransition, useState, useEffect } from 'react';
+
 
 interface ProductImageGalleryProps {
   title: string;
   thumbnail: string;
   images?: string[];
+  productId?: number;
 }
 
 /**
- * Accessible product image gallery component
- * Features keyboard navigation and screen reader support
+ * Accessible product image gallery component with carousel
+ * Features keyboard navigation, screen reader support, and prev/next buttons
  */
 export function ProductImageGallery({
   title,
   thumbnail,
   images,
+  productId,
 }: ProductImageGalleryProps) {
-  const [selectedImage, setSelectedImage] = useState(thumbnail);
   const allImages = images && images.length > 0 ? images : [thumbnail];
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  // Track hash changes to update current slide
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash;
+      const match = hash.match(/slide(\d+)/);
+      if (match) {
+        const slideIndex = parseInt(match[1]) - 1;
+        if (slideIndex >= 0 && slideIndex < allImages.length) {
+          setCurrentSlide(slideIndex);
+        }
+      }
+    };
+
+    handleHashChange();
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, [allImages.length]);
+
+  const goToSlide = (index: number) => {
+    setCurrentSlide(index);
+    // Use history.replaceState to avoid scrolling behavior
+    const newHash = `#slide${index + 1}`;
+    history.replaceState(null, '', newHash);
+
+    // Manually scroll the carousel to the target slide
+    const targetSlide = document.getElementById(`slide${index + 1}`);
+    if (targetSlide) {
+      targetSlide.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+    }
+  };
+
+  const prevSlide = () => {
+    const prevIndex = currentSlide === 0 ? allImages.length - 1 : currentSlide - 1;
+    goToSlide(prevIndex);
+  };
+
+  const nextSlide = () => {
+    const nextIndex = currentSlide === allImages.length - 1 ? 0 : currentSlide + 1;
+    goToSlide(nextIndex);
+  };
 
   return (
     <section aria-label="Product images" className="space-y-4">
-      {/* Main Image */}
-      <div className="aspect-square relative bg-base-200 rounded-lg overflow-hidden">
-        <Image
-          src={selectedImage}
-          alt={title}
-          fill
-          priority
-          className="object-cover"
-          sizes="(max-width: 1024px) 100vw, 50vw"
-        />
+      {/* Carousel */}
+      <div className="carousel w-full aspect-square bg-base-200 rounded-lg overflow-hidden">
+        {allImages.map((image, index) => (
+          <div
+            key={index}
+            id={`slide${index + 1}`}
+            className="carousel-item relative w-full"
+          >
+            {productId ? (
+                <Image
+                  src={image}
+                  alt={`${title} - Image ${index + 1}`}
+                  fill
+                  priority={index === 0}
+                  quality={90}
+                  className="object-cover"
+                  sizes="(max-width: 1023px) calc(100vw - 2rem), calc(50vw - 2rem)"
+                />
+            ) : (
+              <Image
+                src={image}
+                alt={`${title} - Image ${index + 1}`}
+                fill
+                priority={index === 0}
+                quality={90}
+                className="object-cover"
+                sizes="(max-width: 1023px) calc(100vw - 2rem), calc(50vw - 2rem)"
+              />
+            )}
+
+            {/* Navigation Buttons - only show if multiple images */}
+            {allImages.length > 1 && (
+              <div className="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
+                <button
+                  onClick={prevSlide}
+                  className="btn btn-circle"
+                  aria-label="Previous image"
+                >
+                  ❮
+                </button>
+                <button
+                  onClick={nextSlide}
+                  className="btn btn-circle"
+                  aria-label="Next image"
+                >
+                  ❯
+                </button>
+              </div>
+            )}
+          </div>
+        ))}
       </div>
 
       {/* Thumbnail Gallery */}
@@ -45,20 +130,20 @@ export function ProductImageGallery({
           {allImages.slice(0, 4).map((image, index) => (
             <button
               key={index}
-              onClick={() => setSelectedImage(image)}
+              onClick={() => goToSlide(index)}
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {
                   e.preventDefault();
-                  setSelectedImage(image);
+                  goToSlide(index);
                 }
               }}
               className={`aspect-square relative bg-base-200 rounded overflow-hidden border-2 transition-colors ${
-                selectedImage === image
+                currentSlide === index
                   ? "border-primary"
                   : "border-transparent hover:border-base-300"
               }`}
               aria-label={`View image ${index + 1} of ${allImages.length}`}
-              aria-pressed={selectedImage === image}
+              aria-pressed={currentSlide === index}
             >
               <Image
                 src={image}

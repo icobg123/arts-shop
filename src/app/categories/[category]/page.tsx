@@ -1,0 +1,94 @@
+import { unstable_ViewTransition as ViewTransition } from "react";
+import { notFound } from "next/navigation";
+import Link from "next/link";
+import {
+  getCategories,
+  getProductsByCategory,
+} from "@/lib/api/products";
+import { CategoryProductCard } from "@/components/category/CategoryProductCard";
+import type { Metadata } from "next";
+
+interface CategoryPageProps {
+  params: Promise<{
+    category: string;
+  }>;
+}
+
+export async function generateStaticParams() {
+  const categories = await getCategories();
+
+  return categories.map((category) => ({
+    category: category,
+  }));
+}
+
+export async function generateMetadata({
+  params,
+}: CategoryPageProps): Promise<Metadata> {
+  const { category } = await params;
+  const categoryName = category
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+
+  return {
+    title: `${categoryName} - Shop by Category`,
+    description: `Browse our collection of ${categoryName.toLowerCase()} products`,
+  };
+}
+
+export default async function CategoryPage({ params }: CategoryPageProps) {
+  const { category } = await params;
+
+  try {
+    const { products, total } = await getProductsByCategory(category, 0);
+
+    if (!products || products.length === 0) {
+      notFound();
+    }
+
+    const categoryName = category
+      .split("-")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+
+    return (
+      <ViewTransition>
+        <div className="container mx-auto px-4 py-8">
+          {/* Category Header */}
+          <div className="mb-8">
+            <div className="breadcrumbs text-sm mb-4">
+              <ul>
+                <li>
+                  <Link href="/">Home</Link>
+                </li>
+                <li>
+                  <Link href="/categories">Categories</Link>
+                </li>
+                <li>{categoryName}</li>
+              </ul>
+            </div>
+            <h1 className="text-4xl font-bold mb-2">{categoryName}</h1>
+            <p className="text-base-content/70">
+              {total} {total === 1 ? "product" : "products"} available
+            </p>
+          </div>
+
+          {/* Product Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {products.map((product) => (
+              <CategoryProductCard
+                key={product.id}
+                product={product}
+                category={category}
+              />
+            ))}
+          </div>
+        </div>
+      </ViewTransition>
+    );
+  } catch (error) {
+    console.error("Error fetching category:", error);
+    notFound();
+  }
+}

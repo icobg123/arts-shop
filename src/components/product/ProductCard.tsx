@@ -1,7 +1,12 @@
-import Link from "next/link";
+"use client";
+
+import { unstable_ViewTransition as ViewTransition } from "react";
 import Image from "next/image";
+import { TransitionLink } from "@/components/common/TransitionLink";
 import { Product } from "@/types/product";
 import { ProductRating } from "./ProductRating";
+import { getProductUrl } from "@/lib/api/products";
+import Link from "next/link";
 
 interface ProductCardProps {
   product: Product;
@@ -19,26 +24,28 @@ export function ProductCard({ product }: ProductCardProps) {
 
   return (
     <article className="card bg-base-100 shadow-md hover:shadow-xl transition-shadow">
-      <Link href={`/products/${product.id}`}>
-        <figure className="relative aspect-square bg-base-200">
-          <Image
-            src={product.thumbnail}
-            alt={product.title}
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-          />
-          {hasDiscount && (
-            <div className="badge badge-error absolute top-2 right-2">
-              {product.discountPercentage.toFixed(0)}% OFF
-            </div>
-          )}
-          {product.stock === 0 && (
-            <div className="badge badge-neutral absolute top-2 left-2">
-              Out of Stock
-            </div>
-          )}
-        </figure>
+      <Link href={getProductUrl(product.category, product.id)}>
+        <ViewTransition name={`product-image-${product.id}`} >
+          <figure className="relative aspect-square bg-base-200">
+            <Image
+              src={product.thumbnail}
+              alt={product.title}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+            />
+            {hasDiscount && (
+              <div className="badge badge-error absolute top-2 right-2">
+                {product.discountPercentage.toFixed(0)}% OFF
+              </div>
+            )}
+            {product.stock === 0 && (
+              <div className="badge badge-neutral absolute top-2 left-2">
+                Out of Stock
+              </div>
+            )}
+          </figure>
+        </ViewTransition>
         <div className="card-body">
           {product.brand && (
             <div className="badge badge-primary badge-sm">{product.brand}</div>

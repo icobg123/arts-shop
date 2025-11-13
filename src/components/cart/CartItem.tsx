@@ -1,6 +1,7 @@
 "use client";
 
 import { useCartStore } from "@/store/cartStore";
+import { getProductUrl } from "@/lib/api/products";
 import Image from "next/image";
 import Link from "next/link";
 import { X, Plus, Minus } from "lucide-react";
@@ -16,6 +17,7 @@ interface CartItemProps {
     quantity: number;
     stock: number;
     discountPercentage: number;
+    category: string;
   };
 }
 
@@ -63,7 +65,7 @@ export default function CartItem({ item }: CartItemProps) {
     <div className="flex gap-4 p-4 bg-base-100 rounded-lg border border-base-300">
       {/* Product Image */}
       <Link
-        href={`/products/${item.id}`}
+        href={getProductUrl(item.category, item.id)}
         className="relative h-24 w-24 flex-shrink-0 rounded-lg overflow-hidden bg-base-200"
       >
         <Image
@@ -80,7 +82,7 @@ export default function CartItem({ item }: CartItemProps) {
         <div className="flex justify-between items-start gap-2">
           <div>
             <Link
-              href={`/products/${item.id}`}
+              href={getProductUrl(item.category, item.id)}
               className="font-semibold hover:text-primary transition-colors line-clamp-2"
             >
               {item.title}

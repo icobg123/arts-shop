@@ -4,3 +4,41 @@
   themes: light --preferslight, night --default;
 
 }
+
+/* React 19 View Transitions Configuration */
+
+/* Global default timing for all view transitions */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 200ms;
+  animation-timing-function: ease-in-out;
+}
+
+/* All elements default transition */
+::view-transition-old(*),
+::view-transition-new(*) {
+  animation-duration: 250ms;
+  animation-timing-function: ease-in-out;
+}
+
+/* Skeleton loading transitions - smooth fade */
+::view-transition-old(.loading-skeleton),
+::view-transition-new(.loading-skeleton) {
+  animation-duration: 300ms;
+  animation-timing-function: ease-in-out;
+}
+
+/* Section streaming transitions - slightly longer for better effect */
+::view-transition-old(.streaming-section),
+::view-transition-new(.streaming-section) {
+  animation-duration: 400ms;
+  animation-timing-function: ease-in-out;
+}
+
+/* Respect user preferences for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation-duration: 50ms !important;
+  }
+}
