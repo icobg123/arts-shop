@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { getCategoryUrl } from "@/lib/api/products";
+import { Breadcrumb } from "@/components/ui/Breadcrumb";
 
 interface ProductBreadcrumbProps {
   category: string;
@@ -7,8 +7,8 @@ interface ProductBreadcrumbProps {
 }
 
 /**
- * Accessible breadcrumb navigation component
- * Uses semantic nav element and proper ARIA labels
+ * Product breadcrumb navigation component
+ * Uses the reusable Breadcrumb component
  */
 export function ProductBreadcrumb({
   category,
@@ -19,20 +19,12 @@ export function ProductBreadcrumb({
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
 
-  return (
-    <nav aria-label="Breadcrumb" className="text-sm mb-6">
-      <ol className="breadcrumbs">
-        <li>
-          <Link href="/">Home</Link>
-        </li>
-        <li>
-          <Link href="/categories">Categories</Link>
-        </li>
-        <li>
-          <Link href={getCategoryUrl(category)}>{categoryName}</Link>
-        </li>
-        <li aria-current="page">{productTitle}</li>
-      </ol>
-    </nav>
-  );
+  const breadcrumbItems = [
+    { label: "Home", href: "/" },
+    { label: "Categories", href: "/categories" },
+    { label: categoryName, href: getCategoryUrl(category) },
+    { label: productTitle },
+  ];
+
+  return <Breadcrumb items={breadcrumbItems} className="mb-6" />;
 }

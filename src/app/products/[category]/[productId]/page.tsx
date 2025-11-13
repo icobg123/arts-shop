@@ -184,21 +184,16 @@ export default async function ProductPage({ params }: ProductPageProps) {
         </div>
       </article>
 
-      Reviews Section with Streaming
       {product.reviews && product.reviews.length > 0 && (
         <Suspense fallback={<ReviewsSkeleton />}>
           <section aria-labelledby="reviews-heading" className="mt-12 space-y-6">
             <h2 id="reviews-heading" className="text-2xl font-bold">
               Customer Reviews
             </h2>
-
-            Review Summary with Rating Breakdown
             <ReviewSummary
               reviews={product.reviews}
               averageRating={product.rating}
             />
-
-            Reviews List with Filters and Pagination
             <ReviewsList reviews={product.reviews} />
           </section>
         </Suspense>

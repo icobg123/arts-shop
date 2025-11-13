@@ -1,3 +1,5 @@
+import { cn } from "@/lib/utils/cn";
+
 interface ProductRatingProps {
   rating: number;
   reviewCount?: number;
@@ -21,17 +23,24 @@ export function ProductRating({
   return (
     <div className="flex items-center gap-2">
       <div
-        className={`rating rating-${size}`}
+        className={cn(
+          "rating",
+          size === "sm" && "rating-sm",
+          size === "md" && "rating-md",
+          size === "lg" && "rating-lg"
+        )}
         role="img"
         aria-label={ratingText}
       >
         {[1, 2, 3, 4, 5].map((star) => (
-          <span
+          <div
             key={star}
-            className={`mask mask-star-2 ${
+            className={cn(
+              "mask mask-star-2",
               star <= roundedRating ? "bg-orange-400" : "bg-base-300"
-            }`}
-            aria-hidden="true"
+            )}
+            aria-label={`${star} star`}
+            aria-current={star === roundedRating ? "true" : undefined}
           />
         ))}
       </div>

@@ -4,6 +4,7 @@ import { unstable_ViewTransition as ViewTransition } from "react";
 import { useCartStore } from "@/store/cartStore";
 import CartItem from "@/components/cart/CartItem";
 import CartSummary from "@/components/cart/CartSummary";
+import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import Link from "next/link";
 import { ShoppingCart, ArrowLeft } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -66,9 +67,17 @@ export default function CartPage() {
     );
   }
 
+  const breadcrumbItems = [
+    { label: "Home", href: "/" },
+    { label: "Shopping Cart" },
+  ];
+
   return (
     <ViewTransition>
       <div className="container mx-auto px-4 py-8">
+        {/* Breadcrumbs */}
+        <Breadcrumb items={breadcrumbItems} className="mb-6" />
+
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>

@@ -75,9 +75,8 @@ export function ReviewsList({ reviews }: ReviewsListProps) {
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
         {/* Sort Dropdown */}
         <div className="form-control w-full sm:w-auto">
-          <label htmlFor="sort-reviews" className="label">
-            <span className="label-text">Sort by</span>
-          </label>
+          <label htmlFor="sort-reviews" className="select">
+            <span className="label">Sort by</span>
           <select
             id="sort-reviews"
             value={sortBy}
@@ -88,13 +87,14 @@ export function ReviewsList({ reviews }: ReviewsListProps) {
             <option value="highest">Highest Rating</option>
             <option value="lowest">Lowest Rating</option>
           </select>
+          </label>
         </div>
 
         {/* Rating Filter */}
         <div className="form-control w-full sm:w-auto">
-          <label htmlFor="filter-reviews" className="label">
-            <span className="label-text">Filter by rating</span>
-          </label>
+          <label htmlFor="filter-reviews" className="select">
+            <span className="label">Filter by rating</span>
+
           <select
             id="filter-reviews"
             value={filterRating}
@@ -110,14 +110,15 @@ export function ReviewsList({ reviews }: ReviewsListProps) {
             <option value="2">2 Stars</option>
             <option value="1">1 Star</option>
           </select>
+          </label>
         </div>
       </div>
 
       {/* Results count */}
-      <div className="text-sm text-base-content/60">
+      {/*<div className="text-sm text-base-content/60">
         Showing {visibleReviews.length} of {filteredAndSortedReviews.length} reviews
         {filterRating !== "all" && ` with ${filterRating} stars`}
-      </div>
+      </div>*/}
 
       {/* Reviews List */}
       {filteredAndSortedReviews.length === 0 ? (

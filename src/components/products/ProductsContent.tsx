@@ -1,33 +1,33 @@
 "use client";
 
-import { useQueryStates, parseAsString, parseAsInteger } from "nuqs";
-import { useEffect, useState, useDeferredValue, useMemo } from "react";
+import { useQueryStates } from "nuqs";
+import { useEffect, useState, useDeferredValue, useMemo, startTransition, useRef } from "react";
 import { unstable_ViewTransition as ViewTransition } from "react";
 import { getProducts, getCategories } from "@/lib/api/products";
 import { ProductGridSkeleton } from "@/components/skeletons/ProductGridSkeleton";
 import { ProductCard } from "@/components/product/ProductCard";
+import { Pagination } from "@/components/ui/Pagination";
 import type { Product } from "@/lib/schemas/product.schema";
+import { productsSearchParams } from "@/lib/searchParams/products";
+import { Search, XIcon } from "lucide-react";
 
 const PRODUCTS_PER_PAGE = 20;
 
 // ProductsList component with deferred filtering (matches the example pattern)
 function ProductsList({
   searchText,
-  category,
   products
 }: {
   searchText: string;
-  category: string;
   products: Product[];
 }) {
   // Activate with useDeferredValue ("when")
   const deferredSearchText = useDeferredValue(searchText);
-  const deferredCategory = useDeferredValue(category);
 
   // Memoize the filtering to avoid re-calculating on every render
   const filteredProducts = useMemo(
-    () => filterProducts(products, deferredSearchText, deferredCategory),
-    [products, deferredSearchText, deferredCategory]
+    () => filterProducts(products, deferredSearchText),
+    [products, deferredSearchText]
   );
 
   return (
@@ -36,13 +36,20 @@ function ProductsList({
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredProducts.map((product) => (
             // Animate each item in list ("what")
-            <ViewTransition key={product.id}>
+            <ViewTransition
+              key={product.id}
+              enter="slide-up"
+              exit="slide-down"
+            >
               <ProductCard product={product} />
             </ViewTransition>
           ))}
         </div>
       ) : (
-        <ViewTransition>
+        <ViewTransition
+          enter="slide-up"
+          exit="slide-down"
+        >
           <div className="text-center py-12">
             <p className="text-lg text-base-content/70">No products found</p>
           </div>
@@ -52,110 +59,191 @@ function ProductsList({
   );
 }
 
-// Filter function (similar to filterVideos in the example)
-function filterProducts(products: Product[], searchQuery: string, categoryFilter: string) {
-  // Early return if no filters
-  if (!searchQuery && categoryFilter === "all") {
+// Filter function - only handles search now (category is server-side)
+function filterProducts(products: Product[], searchQuery: string) {
+  // Early return if no search query
+  if (!searchQuery) {
     return products;
   }
 
-  const keywords = searchQuery
-    ? searchQuery.toLowerCase().split(" ").filter((s) => s !== "")
-    : [];
+  const keywords = searchQuery.toLowerCase().split(" ").filter((s) => s !== "");
+
+  if (keywords.length === 0) {
+    return products;
+  }
 
   return products.filter((product) => {
-    // Category filter
-    if (categoryFilter !== "all" && product.category !== categoryFilter) {
-      return false;
-    }
-
-    // Search filter
-    if (keywords.length > 0) {
-      const searchText = `${product.title} ${product.description}`.toLowerCase();
-      return keywords.every((kw) => searchText.includes(kw));
-    }
-
-    return true;
+    const searchText = `${product.title} ${product.description}`.toLowerCase();
+    return keywords.every((kw) => searchText.includes(kw));
   });
 }
 
-export function ProductsContent() {
-  const [{ search, category, page }, setQuery] = useQueryStates(
-    {
-      search: parseAsString.withDefault(""),
-      category: parseAsString.withDefault("all"),
-      page: parseAsInteger.withDefault(1),
-    },
-    {
-      history: "push",
-    }
+interface ProductsContentProps {
+  initialProducts: Product[];
+  initialTotal: number;
+  initialCategories: string[];
+}
+
+export function ProductsContent({
+  initialProducts,
+  initialTotal,
+  initialCategories,
+}: ProductsContentProps) {
+  const [{ search, category, page, sortBy, order }, setQuery] = useQueryStates(
+    productsSearchParams
   );
 
-  const [allProducts, setAllProducts] = useState<Product[]>([]);
-  const [categories, setCategories] = useState<string[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [categoryProducts, setCategoryProducts] = useState<Product[]>(initialProducts);
+  const [categories] = useState<string[]>(initialCategories);
+  const [loading, setLoading] = useState(false);
+  const [totalProducts, setTotalProducts] = useState(initialTotal);
 
-  // Fetch all products on mount (we'll filter client-side)
+  // Track if this is the initial mount to avoid unnecessary fetch
+  const isInitialMount = useRef(true);
+
+  // Fetch products from server when category, page, or sorting changes (client-side navigation)
   useEffect(() => {
-    Promise.all([
-      getProducts({ limit: 100 }), // Fetch more products for client-side filtering
-      getCategories()
-    ]).then(([productsResponse, categoriesData]) => {
-      setAllProducts(productsResponse.products);
-      setCategories(categoriesData);
-      setLoading(false);
-    });
-  }, []);
+    // Skip fetch on initial mount since we have server data
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+
+    setLoading(true);
+    const skip = (page - 1) * PRODUCTS_PER_PAGE;
+
+    getProducts({
+      limit: PRODUCTS_PER_PAGE,
+      skip,
+      category: category === "all" ? undefined : category,
+      sortBy: sortBy || undefined,
+      order: order as "asc" | "desc",
+    })
+      .then((response) => {
+        startTransition(() => {
+          setCategoryProducts(response.products);
+          setTotalProducts(response.total);
+          setLoading(false);
+        });
+      })
+      .catch((error) => {
+        console.error("Error fetching products:", error);
+        startTransition(() => {
+          setCategoryProducts([]);
+          setTotalProducts(0);
+          setLoading(false);
+        });
+      });
+  }, [category, page, sortBy, order]);
+
+  const totalPages = Math.ceil(totalProducts / PRODUCTS_PER_PAGE);
 
   return (
     <div className="space-y-6">
       {/* Filters */}
-      <div className="card bg-base-200 shadow-lg">
-        <div className="card-body">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="card">
+        <div className="card-body p-0">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Search Input */}
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text font-semibold">Search Products</span>
+            <div className="flex flex-col gap-2">
+              <label className="input input-bordered flex items-center gap-2 w-full">
+                <Search className="h-4 w-4 opacity-70 min-w-5"/>
+                <input
+                  type="text"
+                  className="grow"
+                  placeholder="Search products..."
+                  value={search}
+                  onChange={(e) => {
+                    setQuery({ search: e.target.value, page: 1 });
+                  }}
+                />
+                {search && (
+                  <button
+                    onClick={() => setQuery({ search: "", page: 1 })}
+                    className="btn btn-ghost btn-xs btn-circle"
+                    aria-label="Clear search"
+                  >
+                    <XIcon className="h-4 w-4"/>
+                  </button>
+                )}
+                <span className="label">{loading?<span className="h-4 w-6 skeleton"></span>:totalProducts} {totalProducts === 1 ? "product" : "products"} available</span>
               </label>
-              <input
-                type="text"
-                placeholder="Search by name or description..."
-                className="input input-bordered w-full"
-                value={search}
-                onChange={(e) => {
-                  setQuery({ search: e.target.value, page: 1 });
-                }}
-              />
             </div>
 
             {/* Category Filter */}
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text font-semibold">Category</span>
+            <div className="flex flex-col gap-2">
+              <label className="select select-bordered flex items-center gap-2 w-full">
+                <span className="label opacity-70">Category</span>
+                <select
+                  className="grow"
+                  value={category}
+                  onChange={(e) => {
+                    setQuery({ category: e.target.value, page: 1 });
+                  }}
+                >
+                  <option value="all">All Categories</option>
+                  {categories.map((cat) => (
+                    <option key={cat} value={cat}>
+                      {cat
+                        .split("-")
+                        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                        .join(" ")}
+                    </option>
+                  ))}
+                </select>
               </label>
-              <select
-                className="select select-bordered w-full"
-                value={category}
-                onChange={(e) => {
-                  setQuery({ category: e.target.value, page: 1 });
-                }}
-              >
-                <option value="all">All Categories</option>
-                {categories.map((cat) => (
-                  <option key={cat} value={cat}>
-                    {cat
-                      .split("-")
-                      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                      .join(" ")}
-                  </option>
-                ))}
-              </select>
+            </div>
+
+            {/* Sort By Filter */}
+            <div className="flex flex-col gap-2">
+              <label className="select select-bordered flex items-center gap-2 w-full">
+                <span className="label opacity-70">Sort By</span>
+                <select
+                  className="grow"
+                  value={sortBy}
+                  onChange={(e) => {
+                    setQuery({ sortBy: e.target.value, page: 1 });
+                  }}
+                >
+                  <option value="">Default</option>
+                  <option value="title">Title</option>
+                  <option value="price">Price</option>
+                  <option value="rating">Rating</option>
+                  <option value="brand">Brand</option>
+                </select>
+              </label>
+            </div>
+
+            {/* Sort Order Filter */}
+            <div className="flex flex-col gap-2">
+              <label className="select select-bordered flex items-center gap-2 w-full">
+                <span className="label opacity-70">Order</span>
+                <select
+                  className="grow"
+                  value={order}
+                  onChange={(e) => {
+                    setQuery({ order: e.target.value, page: 1 });
+                  }}
+                  disabled={!sortBy}
+                >
+                  <option value="asc">Ascending</option>
+                  <option value="desc">Descending</option>
+                </select>
+              </label>
             </div>
           </div>
 
+          {/* Pagination Row */}
+          <div className="mt-4">
+            <Pagination
+              currentPage={page}
+              totalPages={totalPages}
+              onPageChange={(newPage) => setQuery({ page: newPage })}
+            />
+          </div>
+
           {/* Active Filters */}
-          {(search || category !== "all") && (
+          {(search || category !== "all" || sortBy) && (
             <div className="flex flex-wrap gap-2 mt-4">
               {search && (
                 <div className="badge badge-primary gap-2">
@@ -183,8 +271,19 @@ export function ProductsContent() {
                   </button>
                 </div>
               )}
+              {sortBy && (
+                <div className="badge badge-accent gap-2">
+                  Sort: {sortBy.charAt(0).toUpperCase() + sortBy.slice(1)} ({order})
+                  <button
+                    onClick={() => setQuery({ sortBy: "", order: "asc" })}
+                    className="btn btn-ghost btn-xs"
+                  >
+                    ✕
+                  </button>
+                </div>
+              )}
               <button
-                onClick={() => setQuery({ search: "", category: "all", page: 1 })}
+                onClick={() => setQuery({ search: "", category: "all", sortBy: "", order: "asc", page: 1 })}
                 className="btn btn-ghost btn-xs"
               >
                 Clear All
@@ -197,19 +296,35 @@ export function ProductsContent() {
       {/* Results Count */}
       {!loading && (
         <div className="text-sm text-base-content/70">
-          {allProducts.length} products available
+          Showing {categoryProducts.length} of {totalProducts} products
+          {search && " (filtered by search)"}
         </div>
       )}
 
       {/* Products Grid */}
-      {loading ? (
-        <ProductGridSkeleton count={8} />
-      ) : (
-        <ProductsList
-          searchText={search}
-          category={category}
-          products={allProducts}
-        />
+      <ViewTransition
+        enter="slide-up"
+        exit="slide-down"
+      >
+        {loading ? (
+          <ProductGridSkeleton count={8} />
+        ) : (
+          <ProductsList
+            searchText={search}
+            products={categoryProducts}
+          />
+        )}
+      </ViewTransition>
+
+      {/* Pagination */}
+      {!loading && (
+        <div className="mt-8">
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={(newPage) => setQuery({ page: newPage })}
+          />
+        </div>
       )}
     </div>
   );

@@ -22,9 +22,8 @@ export function ProductCard({ product }: ProductCardProps) {
     : null;
 
   return (
-    <ViewTransition>
-      <article className="card bg-base-100 shadow-md hover:shadow-xl transition-shadow">
-        <Link href={getProductUrl(product.category, product.id)}>
+    <article className="card bg-base-100 shadow-md hover:shadow-xl transition-shadow">
+      <Link href={getProductUrl(product.category, product.id)}>
           <ViewTransition name={`product-image-${product.id}`}>
             <figure className="relative aspect-square bg-base-200">
             <Image
@@ -75,6 +74,5 @@ export function ProductCard({ product }: ProductCardProps) {
         </div>
       </Link>
     </article>
-    </ViewTransition>
   );
 }

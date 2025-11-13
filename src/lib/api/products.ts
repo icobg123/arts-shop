@@ -11,15 +11,15 @@ import type { GetProductsParams } from "@/types/api";
 const BASE_URL = "https://dummyjson.com";
 
 /**
- * Get products with optional filtering, pagination, and search
+ * Get products with optional filtering, pagination, search, and sorting
  *
- * @param params - Query parameters for filtering and pagination
+ * @param params - Query parameters for filtering, pagination, and sorting
  * @returns Product list with pagination info
  */
 export async function getProducts(
   params: GetProductsParams = {}
 ): Promise<ProductListResponse> {
-  const { limit = 30, skip = 0, search, category } = params;
+  const { limit = 30, skip = 0, search, category, sortBy, order } = params;
 
   let url = `${BASE_URL}/products`;
 
@@ -32,6 +32,11 @@ export async function getProducts(
   // Add pagination parameters
   const separator = search ? "&" : "?";
   url += `${separator}limit=${limit}&skip=${skip}`;
+
+  // Add sorting parameters if provided
+  if (sortBy && sortBy.trim() !== "") {
+    url += `&sortBy=${encodeURIComponent(sortBy)}&order=${order || "asc"}`;
+  }
 
   return fetchAPI(url, ProductListResponseSchema);
 }

@@ -12,4 +12,6 @@ export interface GetProductsParams {
   skip?: number;
   search?: string;
   category?: string;
+  sortBy?: string;
+  order?: "asc" | "desc";
 }

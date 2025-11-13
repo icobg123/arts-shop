@@ -91,22 +91,11 @@ export default function Header() {
         {/* Center: Desktop Navigation Links */}
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">
-            {/* Home */}
-            <li>
-              <Link href="/">Home</Link>
-            </li>
-
-            {/* Products */}
-            <li>
-              <Link href="/products">Products</Link>
-            </li>
-
             {/* Categories Dropdown */}
             <li>
               <details ref={useRef<HTMLDetailsElement>(null)}>
                 <summary>
                   Categories
-                  <ChevronDown className="h-4 w-4 ml-1" />
                 </summary>
                 <ul className="bg-base-100 p-2 w-52 shadow-lg">
                   <li>
@@ -120,9 +109,8 @@ export default function Header() {
                       All Categories
                     </Link>
                   </li>
-                  <li>
-                    <hr className="my-2" />
-                  </li>
+                    <div className="divider my-0.5" />
+
                   {categories.length > 0 ? (
                     categories.map((category) => (
                       <li key={category}>
@@ -175,19 +163,6 @@ export default function Header() {
       {isMobileMenuOpen && (
         <div className="lg:hidden bg-base-200 border-t border-base-300">
           <ul className="menu menu-compact p-4">
-            <li>
-              <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/products"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Products
-              </Link>
-            </li>
             <li>
               <details>
                 <summary>Categories</summary>
