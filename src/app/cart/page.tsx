@@ -58,7 +58,7 @@ export default function CartPage() {
               Looks like you haven&apos;t added any items to your cart yet. Start
               shopping to fill it up!
             </p>
-            <Link href="/products" className="btn btn-primary btn-lg">
+            <Link href="/" className="btn btn-primary btn-lg">
               Continue Shopping
             </Link>
           </div>
@@ -86,7 +86,7 @@ export default function CartPage() {
               {items.length} {items.length === 1 ? "item" : "items"} in your cart
             </p>
           </div>
-          <Link href="/products" className="btn btn-ghost gap-2">
+          <Link href="/" className="btn btn-ghost gap-2">
             <ArrowLeft className="h-4 w-4" />
             Continue Shopping
           </Link>

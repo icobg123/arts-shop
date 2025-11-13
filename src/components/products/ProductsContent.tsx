@@ -9,7 +9,7 @@ import { ProductCard } from "@/components/product/ProductCard";
 import { Pagination } from "@/components/ui/Pagination";
 import type { Product } from "@/lib/schemas/product.schema";
 import { productsSearchParams } from "@/lib/searchParams/products";
-import { Search, XIcon } from "lucide-react";
+import { Search, XIcon, Tag, ArrowUpDown } from "lucide-react";
 
 const PRODUCTS_PER_PAGE = 20;
 
@@ -140,6 +140,68 @@ export function ProductsContent({
 
   return (
     <div className="space-y-6">
+      {/* Active Filters */}
+      {(search || category !== "all" || sortBy) && (
+        <div className="alert bg-base-200 border border-base-300">
+          <div className="w-full">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-semibold opacity-70">Active Filters:</span>
+              <button
+                onClick={() => setQuery({ search: "", category: "all", sortBy: "", order: "asc", page: 1 })}
+                className="btn btn-ghost btn-sm"
+              >
+                Clear All
+              </button>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {search && (
+                <div className="badge badge-primary gap-2">
+                  <Search className="h-3 w-3" />
+                  Search: {search}
+                  <button
+                    onClick={() => setQuery({ search: "" })}
+                    className="btn btn-ghost btn-xs"
+                    aria-label="Clear search filter"
+                  >
+                    ✕
+                  </button>
+                </div>
+              )}
+              {category !== "all" && (
+                <div className="badge badge-secondary gap-2">
+                  <Tag className="h-3 w-3" />
+                  Category:{" "}
+                  {category
+                    .split("-")
+                    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                    .join(" ")}
+                  <button
+                    onClick={() => setQuery({ category: "all" })}
+                    className="btn btn-ghost btn-xs"
+                    aria-label="Clear category filter"
+                  >
+                    ✕
+                  </button>
+                </div>
+              )}
+              {sortBy && (
+                <div className="badge badge-accent gap-2">
+                  <ArrowUpDown className="h-3 w-3" />
+                  Sort: {sortBy.charAt(0).toUpperCase() + sortBy.slice(1)} ({order})
+                  <button
+                    onClick={() => setQuery({ sortBy: "", order: "asc" })}
+                    className="btn btn-ghost btn-xs"
+                    aria-label="Clear sort filter"
+                  >
+                    ✕
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Filters */}
       <div className="card">
         <div className="card-body p-0">
@@ -241,55 +303,6 @@ export function ProductsContent({
               onPageChange={(newPage) => setQuery({ page: newPage })}
             />
           </div>
-
-          {/* Active Filters */}
-          {(search || category !== "all" || sortBy) && (
-            <div className="flex flex-wrap gap-2 mt-4">
-              {search && (
-                <div className="badge badge-primary gap-2">
-                  Search: {search}
-                  <button
-                    onClick={() => setQuery({ search: "" })}
-                    className="btn btn-ghost btn-xs"
-                  >
-                    ✕
-                  </button>
-                </div>
-              )}
-              {category !== "all" && (
-                <div className="badge badge-secondary gap-2">
-                  Category:{" "}
-                  {category
-                    .split("-")
-                    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                    .join(" ")}
-                  <button
-                    onClick={() => setQuery({ category: "all" })}
-                    className="btn btn-ghost btn-xs"
-                  >
-                    ✕
-                  </button>
-                </div>
-              )}
-              {sortBy && (
-                <div className="badge badge-accent gap-2">
-                  Sort: {sortBy.charAt(0).toUpperCase() + sortBy.slice(1)} ({order})
-                  <button
-                    onClick={() => setQuery({ sortBy: "", order: "asc" })}
-                    className="btn btn-ghost btn-xs"
-                  >
-                    ✕
-                  </button>
-                </div>
-              )}
-              <button
-                onClick={() => setQuery({ search: "", category: "all", sortBy: "", order: "asc", page: 1 })}
-                className="btn btn-ghost btn-xs"
-              >
-                Clear All
-              </button>
-            </div>
-          )}
         </div>
       </div>
 

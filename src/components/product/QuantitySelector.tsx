@@ -48,10 +48,8 @@ export function QuantitySelector({
   };
 
   return (
-    <div className="form-control">
-      <label htmlFor={`qty-${productId}`} className="label">
-        <span className="label-text font-medium">Quantity</span>
-      </label>
+    <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-fit border p-4">
+      <legend className="fieldset-legend">Quantity</legend>
       <div
         role="group"
         aria-label={`Quantity selector for ${productTitle}`}
@@ -91,12 +89,12 @@ export function QuantitySelector({
         </button>
       </div>
       {max <= 10 && (
-        <label className="label">
+        <div className="label pt-2">
           <span className="label-text-alt text-warning">
             Only {max} left in stock
           </span>
-        </label>
+        </div>
       )}
-    </div>
+    </fieldset>
   );
 }

@@ -49,7 +49,7 @@ export function Breadcrumb({
                     {item.label}
                   </Link>
                 ) : (
-                  <span className="inline-flex items-center gap-2">
+                  <span className="inline-flex items-center gap-2 no-underline">
                     {item.label}
                   </span>
                 )}

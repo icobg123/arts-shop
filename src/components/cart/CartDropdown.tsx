@@ -30,7 +30,7 @@ export default function CartDropdown({ onClose }: CartDropdownProps) {
         <div className="text-center">
           <p className="text-base-content/60 text-sm">Your cart is empty</p>
           <Link
-            href="/products"
+            href="/"
             className="btn btn-primary btn-sm mt-4"
             onClick={onClose}
           >
