@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "react-hot-toast";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -53,8 +54,10 @@ export default function RootLayout({
             "light",
           ]}
         >
-          {children}
-          <Toaster position="bottom-right" />
+          <NuqsAdapter>
+            {children}
+            <Toaster position="bottom-right" />
+          </NuqsAdapter>
         </ThemeProvider>
       </body>
     </html>

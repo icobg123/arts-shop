@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { useQueryState, parseAsStringLiteral } from "nuqs";
 import { Review } from "@/types/product";
 import { ReviewCard } from "./ReviewCard";
 
@@ -9,15 +10,27 @@ interface ReviewsListProps {
 }
 
 type SortOption = "recent" | "highest" | "lowest";
-type RatingFilter = "all" | 1 | 2 | 3 | 4 | 5;
+type RatingFilterValue = "all" | "1" | "2" | "3" | "4" | "5";
 
 /**
  * Reviews list component with filtering, sorting, and pagination
  * Shows 5 reviews at a time with "Show more" button
  */
 export function ReviewsList({ reviews }: ReviewsListProps) {
-  const [sortBy, setSortBy] = useState<SortOption>("recent");
-  const [filterRating, setFilterRating] = useState<RatingFilter>("all");
+  const [sortBy, setSortBy] = useQueryState(
+    "sort",
+    parseAsStringLiteral(["recent", "highest", "lowest"] as const).withDefault(
+      "recent",
+    ),
+  );
+
+  const [filterRating, setFilterRating] = useQueryState(
+    "rating",
+    parseAsStringLiteral(["all", "1", "2", "3", "4", "5"] as const).withDefault(
+      "all",
+    ),
+  );
+
   const [visibleCount, setVisibleCount] = useState(5);
 
   // Filter and sort reviews
@@ -26,8 +39,9 @@ export function ReviewsList({ reviews }: ReviewsListProps) {
 
     // Apply rating filter
     if (filterRating !== "all") {
-      filtered = filtered.filter((review) =>
-        Math.floor(review.rating) === filterRating
+      const targetRating = parseInt(filterRating);
+      filtered = filtered.filter(
+        (review) => Math.floor(review.rating) === targetRating,
       );
     }
 
@@ -85,9 +99,7 @@ export function ReviewsList({ reviews }: ReviewsListProps) {
             id="filter-reviews"
             value={filterRating}
             onChange={(e) => {
-              const value = e.target.value;
-              setFilterRating(value === "all" ? "all" : parseInt(value) as RatingFilter);
-              setVisibleCount(5); // Reset pagination on filter change
+              setFilterRating(e.target.value as RatingFilterValue);
             }}
             className="select select-bordered w-full sm:w-auto"
           >
