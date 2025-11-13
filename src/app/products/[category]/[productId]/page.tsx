@@ -1,20 +1,13 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Suspense } from "react";
 
 import { getProduct, getProducts } from "@/lib/api/products";
-import {
-  AddToCartForm,
-  ProductBreadcrumb,
-  ProductDetails,
-  ProductImageGallery,
-  ProductInfo,
-  ProductPrice,
-  ProductRating,
+import { AddToCartForm, ProductBreadcrumb, ProductDetails, ProductImageGallery, ProductInfo, ProductPrice, ProductRating,
   RelatedProducts,
   ReviewsList,
-  ReviewSummary,
+  ReviewSummary
 } from "@/components/product";
+import { Suspense, unstable_ViewTransition as ViewTransition } from "react";
 import { ReviewsSkeleton } from "@/components/skeletons/ReviewsSkeleton";
 import { RelatedProductsSkeleton } from "@/components/skeletons/RelatedProductsSkeleton";
 
@@ -77,7 +70,8 @@ export async function generateStaticParams() {
 }
 
 /**
- * Product detail page component
+ * Product detail page component (Server Component)
+ * Handles data fetching and passes to client component
  */
 export default async function ProductPage({ params }: ProductPageProps) {
   const { category, productId } = await params;
@@ -92,11 +86,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
     }
   } catch {
     notFound();
-
   }
 
-  return (
-
+  return <ViewTransition>
     <main className="container mx-auto px-4 py-8">
       <ProductBreadcrumb
         category={product.category}
@@ -114,32 +106,40 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
         {/* Right Column - Product Info */}
         <div className="space-y-6">
-          {/* Brand Badge */}
+          Brand Badge
           {product.brand && (
-            <div
-              className="badge badge-primary"
-              aria-label={`Brand: ${product.brand}`}
-            >
-              {product.brand}
-            </div>
+            <ViewTransition name={`product-brand-${product.id}`}>
+              <div
+                className="badge badge-primary"
+                aria-label={`Brand: ${product.brand}`}
+              >
+                {product.brand}
+              </div>
+            </ViewTransition>
           )}
 
-          {/* Product Title */}
-          <h1 className="text-4xl font-bold">{product.title}</h1>
+          Product Title
+          <ViewTransition name={`product-title-${product.id}`}>
+            <h1 className="text-4xl font-bold">{product.title}</h1>
+          </ViewTransition>
 
-          {/* Rating */}
-          <ProductRating
-            rating={product.rating}
-            reviewCount={product.reviews?.length || 0}
-          />
+          Rating
+          <ViewTransition name={`product-rating-${product.id}`}>
+            <ProductRating
+              rating={product.rating}
+              reviewCount={product.reviews?.length || 0}
+            />
+          </ViewTransition>
 
-          {/* Price */}
-          <ProductPrice
-            price={product.price}
-            discountPercentage={product.discountPercentage}
-          />
+          Price
+          <ViewTransition name={`product-price-${product.id}`}>
+            <ProductPrice
+              price={product.price}
+              discountPercentage={product.discountPercentage}
+            />
+          </ViewTransition>
 
-          {/* Stock Status */}
+          Stock Status
           <div role="status" aria-live="polite">
             {product.stock > 0 ? (
               <div className="badge badge-success">
@@ -151,7 +151,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             )}
           </div>
 
-          {/* Description */}
+          Description
           <section aria-labelledby="description-heading">
             <h2 id="description-heading" className="font-semibold mb-2">
               Description
@@ -159,7 +159,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <p className="text-base-content/80">{product.description}</p>
           </section>
 
-          {/* Product Details */}
+          Product Details
           <div className="divider" role="separator"></div>
 
           <ProductDetails
@@ -170,7 +170,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             minimumOrderQuantity={product.minimumOrderQuantity}
           />
 
-          {/* Additional Info */}
+          Additional Info
           <div className="divider" role="separator"></div>
 
           <ProductInfo
@@ -179,40 +179,36 @@ export default async function ProductPage({ params }: ProductPageProps) {
             returnPolicy={product.returnPolicy}
           />
 
-          {/* Add to Cart Form with Quantity Selector */}
+          Add to Cart Form with Quantity Selector
           <AddToCartForm product={product} />
         </div>
       </article>
 
-       Reviews Section with Streaming
+      Reviews Section with Streaming
       {product.reviews && product.reviews.length > 0 && (
         <Suspense fallback={<ReviewsSkeleton />}>
-          {/*<ViewTransition>*/}
-            <section aria-labelledby="reviews-heading" className="mt-12 space-y-6">
-              <h2 id="reviews-heading" className="text-2xl font-bold">
-                Customer Reviews
-              </h2>
+          <section aria-labelledby="reviews-heading" className="mt-12 space-y-6">
+            <h2 id="reviews-heading" className="text-2xl font-bold">
+              Customer Reviews
+            </h2>
 
-               Review Summary with Rating Breakdown
-              <ReviewSummary
-                reviews={product.reviews}
-                averageRating={product.rating}
-              />
+            Review Summary with Rating Breakdown
+            <ReviewSummary
+              reviews={product.reviews}
+              averageRating={product.rating}
+            />
 
-               Reviews List with Filters and Pagination
-              <ReviewsList reviews={product.reviews} />
-            </section>
-          {/*</ViewTransition>*/}
+            Reviews List with Filters and Pagination
+            <ReviewsList reviews={product.reviews} />
+          </section>
         </Suspense>
       )}
 
-      {/* Related Products Section with Streaming */}
+      Related Products Section with Streaming
       <Suspense fallback={<RelatedProductsSkeleton />}>
-
-          <RelatedProducts category={product.category} excludeId={product.id} />
-
+        <RelatedProducts category={product.category} excludeId={product.id} />
       </Suspense>
     </main>
-
-  );
+  </ViewTransition>;
+  // return <PageClient product={product} />;
 }

@@ -2,7 +2,6 @@
 
 import { unstable_ViewTransition as ViewTransition } from "react";
 import Image from "next/image";
-import { TransitionLink } from "@/components/common/TransitionLink";
 import { Product } from "@/types/product";
 import { ProductRating } from "./ProductRating";
 import { getProductUrl } from "@/lib/api/products";
@@ -23,10 +22,11 @@ export function ProductCard({ product }: ProductCardProps) {
     : null;
 
   return (
-    <article className="card bg-base-100 shadow-md hover:shadow-xl transition-shadow">
-      <Link href={getProductUrl(product.category, product.id)}>
-        <ViewTransition name={`product-image-${product.id}`} >
-          <figure className="relative aspect-square bg-base-200">
+    <ViewTransition>
+      <article className="card bg-base-100 shadow-md hover:shadow-xl transition-shadow">
+        <Link href={getProductUrl(product.category, product.id)}>
+          <ViewTransition name={`product-image-${product.id}`}>
+            <figure className="relative aspect-square bg-base-200">
             <Image
               src={product.thumbnail}
               alt={product.title}
@@ -48,24 +48,33 @@ export function ProductCard({ product }: ProductCardProps) {
         </ViewTransition>
         <div className="card-body">
           {product.brand && (
-            <div className="badge badge-primary badge-sm">{product.brand}</div>
+            <ViewTransition name={`product-brand-${product.id}`}>
+              <div className="badge badge-primary badge-sm">{product.brand}</div>
+            </ViewTransition>
           )}
-          <h3 className="card-title text-base line-clamp-2">{product.title}</h3>
-          <ProductRating
-            rating={product.rating}
-            reviewCount={product.reviews?.length || 0}
-            size="sm"
-          />
-          <div className="flex items-center gap-2">
-            <span className="text-xl font-bold">${product.price.toFixed(2)}</span>
-            {originalPrice && (
-              <span className="text-sm text-base-content/60 line-through">
-                ${originalPrice.toFixed(2)}
-              </span>
-            )}
-          </div>
+          <ViewTransition name={`product-title-${product.id}`}>
+            <h3 className="card-title text-base line-clamp-2">{product.title}</h3>
+          </ViewTransition>
+          <ViewTransition name={`product-rating-${product.id}`}>
+            <ProductRating
+              rating={product.rating}
+              reviewCount={product.reviews?.length || 0}
+              size="sm"
+            />
+          </ViewTransition>
+          <ViewTransition name={`product-price-${product.id}`}>
+            <div className="flex items-center gap-2">
+              <span className="text-xl font-bold">${product.price.toFixed(2)}</span>
+              {originalPrice && (
+                <span className="text-sm text-base-content/60 line-through">
+                  ${originalPrice.toFixed(2)}
+                </span>
+              )}
+            </div>
+          </ViewTransition>
         </div>
       </Link>
     </article>
+    </ViewTransition>
   );
 }
