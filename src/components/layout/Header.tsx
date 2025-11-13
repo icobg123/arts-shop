@@ -2,16 +2,22 @@
 
 import Link from "next/link";
 import { Menu, ChevronDown } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import CartIcon from "@/components/cart/CartIcon";
 import CartDropdown from "@/components/cart/CartDropdown";
 import { getCategories } from "@/lib/api/products";
 import { ThemeSwitch } from "@/components/layout/ThemeSwitch";
+import { useCartStore } from "@/store/cartStore";
 
 export default function Header() {
   const [categories, setCategories] = useState<string[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const cartDropdownRef = useRef<HTMLDivElement>(null);
+
+  // Subscribe to cart changes to optionally auto-open dropdown
+  const totalItems = useCartStore((state) => state.totalItems);
+  const [prevTotalItems, setPrevTotalItems] = useState(0);
 
   useEffect(() => {
     // Fetch categories for navigation
@@ -19,6 +25,47 @@ export default function Header() {
       .then(setCategories)
       .catch((err) => console.error("Failed to load categories:", err));
   }, []);
+
+  // Auto-open dropdown when items are added to cart
+  useEffect(() => {
+    if (totalItems > prevTotalItems && totalItems > 0) {
+      setIsCartOpen(true);
+      // Auto-close after 3 seconds
+      const timer = setTimeout(() => {
+        setIsCartOpen(false);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+    setPrevTotalItems(totalItems);
+  }, [totalItems, prevTotalItems]);
+
+  // Click-outside detection for cart dropdown
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        cartDropdownRef.current &&
+        !cartDropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsCartOpen(false);
+      }
+    };
+
+    const handleEscapeKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsCartOpen(false);
+      }
+    };
+
+    if (isCartOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("keydown", handleEscapeKey);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscapeKey);
+    };
+  }, [isCartOpen]);
 
   return (
     <header className="sticky top-0 z-50 bg-base-100 shadow-md">
@@ -95,15 +142,15 @@ export default function Header() {
           </div>
 
           {/* Cart with Dropdown */}
-          <div className="dropdown dropdown-end">
-            <div tabIndex={0} role="button">
-              <CartIcon
-                onClick={() => setIsCartOpen(!isCartOpen)}
-                className=""
-              />
-            </div>
+          <div className="relative" ref={cartDropdownRef}>
+            <CartIcon
+              onClick={() => setIsCartOpen(!isCartOpen)}
+              className=""
+            />
             {isCartOpen && (
-              <CartDropdown onClose={() => setIsCartOpen(false)} />
+              <div className="absolute right-0 top-full mt-2">
+                <CartDropdown onClose={() => setIsCartOpen(false)} />
+              </div>
             )}
           </div>
         </div>

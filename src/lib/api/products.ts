@@ -50,11 +50,13 @@ export async function getProduct(id: number): Promise<Product> {
 /**
  * Get all available product categories
  *
- * @returns Array of category names
+ * @returns Array of category slugs
  */
 export async function getCategories(): Promise<string[]> {
   const url = `${BASE_URL}/products/categories`;
-  return fetchAPI(url, CategoriesSchema);
+  const categories = await fetchAPI(url, CategoriesSchema);
+  // Extract slugs from category objects
+  return categories.map((cat) => cat.slug);
 }
 
 /**

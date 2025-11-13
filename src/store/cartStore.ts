@@ -19,21 +19,20 @@ export const useCartStore = create<CartStore>()(
         const items = get().items;
         const existingItem = items.find((item) => item.id === product.id);
 
+        let newItems: CartItem[];
         if (existingItem) {
           // Update quantity if item already in cart
-          set({
-            items: items.map((item) =>
-              item.id === product.id
-                ? {
-                    ...item,
-                    quantity: Math.min(
-                      item.quantity + quantity,
-                      item.stock
-                    ),
-                  }
-                : item
-            ),
-          });
+          newItems = items.map((item) =>
+            item.id === product.id
+              ? {
+                  ...item,
+                  quantity: Math.min(
+                    item.quantity + quantity,
+                    item.stock
+                  ),
+                }
+              : item
+          );
         } else {
           // Add new item to cart
           const cartItem: CartItem = {
@@ -45,12 +44,30 @@ export const useCartStore = create<CartStore>()(
             stock: product.stock,
             discountPercentage: product.discountPercentage || 0,
           };
-          set({ items: [...items, cartItem] });
+          newItems = [...items, cartItem];
         }
+
+        // Recalculate computed values
+        const totalItems = newItems.reduce((total, item) => total + item.quantity, 0);
+        const totalPrice = newItems.reduce((total, item) => {
+          const discountedPrice = item.price * (1 - item.discountPercentage / 100);
+          return total + discountedPrice * item.quantity;
+        }, 0);
+
+        set({ items: newItems, totalItems, totalPrice });
       },
 
       removeItem: (productId: number) => {
-        set({ items: get().items.filter((item) => item.id !== productId) });
+        const newItems = get().items.filter((item) => item.id !== productId);
+
+        // Recalculate computed values
+        const totalItems = newItems.reduce((total, item) => total + item.quantity, 0);
+        const totalPrice = newItems.reduce((total, item) => {
+          const discountedPrice = item.price * (1 - item.discountPercentage / 100);
+          return total + discountedPrice * item.quantity;
+        }, 0);
+
+        set({ items: newItems, totalItems, totalPrice });
       },
 
       updateQuantity: (productId: number, quantity: number) => {
@@ -66,38 +83,49 @@ export const useCartStore = create<CartStore>()(
         }
 
         // Update quantity (max is stock)
-        set({
-          items: items.map((i) =>
-            i.id === productId
-              ? { ...i, quantity: Math.min(quantity, i.stock) }
-              : i
-          ),
-        });
+        const newItems = items.map((i) =>
+          i.id === productId
+            ? { ...i, quantity: Math.min(quantity, i.stock) }
+            : i
+        );
+
+        // Recalculate computed values
+        const totalItems = newItems.reduce((total, item) => total + item.quantity, 0);
+        const totalPrice = newItems.reduce((total, item) => {
+          const discountedPrice = item.price * (1 - item.discountPercentage / 100);
+          return total + discountedPrice * item.quantity;
+        }, 0);
+
+        set({ items: newItems, totalItems, totalPrice });
       },
 
       clearCart: () => {
-        set({ items: [] });
+        set({ items: [], totalItems: 0, totalPrice: 0 });
       },
 
-      // Computed values
-      get totalItems() {
-        return get().items.reduce((total, item) => total + item.quantity, 0);
-      },
-
-      get totalPrice() {
-        return get().items.reduce((total, item) => {
-          const discountedPrice =
-            item.price * (1 - item.discountPercentage / 100);
-          return total + discountedPrice * item.quantity;
-        }, 0);
-      },
+      // Computed values as regular properties (not getters)
+      totalItems: 0,
+      totalPrice: 0,
     }),
     {
       name: "arts-cart",
       storage: createJSONStorage(() => localStorage),
-      partialize: (state) => ({ items: state.items }),
+      partialize: (state) => ({
+        items: state.items,
+        totalItems: state.totalItems,
+        totalPrice: state.totalPrice,
+      }),
       onRehydrateStorage: () => (state) => {
         if (state) {
+          // Recalculate computed values on hydration in case of data inconsistency
+          const totalItems = state.items.reduce((total, item) => total + item.quantity, 0);
+          const totalPrice = state.items.reduce((total, item) => {
+            const discountedPrice = item.price * (1 - item.discountPercentage / 100);
+            return total + discountedPrice * item.quantity;
+          }, 0);
+
+          state.totalItems = totalItems;
+          state.totalPrice = totalPrice;
           state.hydrated = true;
         }
       },

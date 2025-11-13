@@ -2,6 +2,8 @@
  * Shopping cart TypeScript types
  */
 
+import { Product } from "@/types/product";
+
 export interface CartItem {
   id: number;
   title: string;
@@ -18,7 +20,7 @@ export interface CartStore {
   hydrated: boolean;
 
   // Actions
-  addItem: (product: CartItem, quantity: number) => void;
+  addItem: (product: Product | CartItem, quantity: number) => void;
   removeItem: (productId: number) => void;
   updateQuantity: (productId: number, quantity: number) => void;
   clearCart: () => void;

@@ -27,7 +27,8 @@ export function AddToCartForm({ product }: AddToCartFormProps) {
     const qty = parseInt(formData.get("quantity") as string) || quantity;
 
     try {
-      addItem({...product,quantity:qty}, qty);
+      // Add item to cart with the correct signature
+      addItem(product, qty);
 
       if (isInCart) {
         toast("Quantity updated in cart", {

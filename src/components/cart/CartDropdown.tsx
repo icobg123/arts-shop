@@ -18,7 +18,7 @@ export default function CartDropdown({ onClose }: CartDropdownProps) {
 
   if (!hydrated) {
     return (
-      <div className="dropdown-content card card-compact w-80 bg-base-100 p-4 shadow-xl z-[100]">
+      <div className="card card-compact w-80 bg-base-100 p-4 shadow-xl border border-base-300 rounded-box">
         <div className="skeleton h-32 w-full"></div>
       </div>
     );
@@ -26,7 +26,7 @@ export default function CartDropdown({ onClose }: CartDropdownProps) {
 
   if (items.length === 0) {
     return (
-      <div className="dropdown-content card card-compact w-80 bg-base-100 p-6 shadow-xl z-[100]">
+      <div className="card card-compact w-80 bg-base-100 p-6 shadow-xl border border-base-300 rounded-box">
         <div className="text-center">
           <p className="text-base-content/60 text-sm">Your cart is empty</p>
           <Link
@@ -51,7 +51,7 @@ export default function CartDropdown({ onClose }: CartDropdownProps) {
   const hasMore = items.length > 3;
 
   return (
-    <div className="dropdown-content card card-compact w-96 bg-base-100 shadow-xl z-[100]">
+    <div className="card card-compact w-96 bg-base-100 shadow-xl border border-base-300 rounded-box">
       <div className="card-body">
         <h3 className="card-title text-base">Shopping Cart</h3>
 

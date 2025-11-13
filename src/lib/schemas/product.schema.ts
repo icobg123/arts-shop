@@ -60,12 +60,22 @@ export const ProductListResponseSchema = z.object({
 });
 
 /**
+ * Zod schema for category object from DummyJSON API
+ */
+export const CategorySchema = z.object({
+  slug: z.string(),
+  name: z.string(),
+  url: z.string().url(),
+});
+
+/**
  * Zod schema for categories list
  */
-export const CategoriesSchema = z.array(z.string());
+export const CategoriesSchema = z.array(CategorySchema);
 
 // Export inferred types
 export type Product = z.infer<typeof ProductSchema>;
 export type ProductListResponse = z.infer<typeof ProductListResponseSchema>;
+export type Category = z.infer<typeof CategorySchema>;
 export type Dimensions = z.infer<typeof DimensionsSchema>;
 export type ProductMeta = z.infer<typeof MetaSchema>;
