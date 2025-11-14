@@ -193,5 +193,4 @@ export default async function ProductPage({ params }: ProductPageProps) {
       </main>
     </ViewTransition>
   );
-  // return <PageClient product={product} />;
 }

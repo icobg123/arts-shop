@@ -47,7 +47,7 @@ npm run dev
     - `useFormStatus()` for clean form state management
     - `use()` hook for async data unwrapping with Suspense
 - **Modern UX** - Toast notifications, auto-open cart dropdown, debounced search
-- **SEO Optimized** - Dynamic metadata, OpenGraph/Twitter cards, breadcrumbs
+- **SEO Optimized** - Dynamic metadata, OpenGraph/Twitter cards, breadcrumbs, XML sitemap
 - **Fully Responsive** - Mobile-first design with accessible UI
 - **14 Themes** - DaisyUI theme switcher with system preference detection
 

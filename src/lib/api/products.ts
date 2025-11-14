@@ -89,7 +89,7 @@ export async function getProductsByCategory(
  * @returns Product URL path
  */
 export function getProductUrl(category: string, productId: number): string {
-  return `/products/${encodeURIComponent(category)}/${productId}`;
+  return `/${encodeURIComponent(category)}/${productId}`;
 }
 
 /**
@@ -99,5 +99,5 @@ export function getProductUrl(category: string, productId: number): string {
  * @returns Category URL path
  */
 export function getCategoryUrl(category: string): string {
-  return `/categories/${encodeURIComponent(category)}`;
+  return `/${encodeURIComponent(category)}`;
 }

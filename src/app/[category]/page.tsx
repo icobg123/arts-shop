@@ -14,6 +14,9 @@ interface CategoryPageProps {
   }>;
 }
 
+// Reserved routes that should not be treated as categories
+const RESERVED_ROUTES = ["cart", "categories", "products"];
+
 export async function generateStaticParams() {
   const categories = await getCategories();
 
@@ -40,8 +43,13 @@ export async function generateMetadata({
 export default async function CategoryPage({ params }: CategoryPageProps) {
   const { category } = await params;
 
+  // Prevent reserved routes from being treated as categories
+  if (RESERVED_ROUTES.includes(category)) {
+    notFound();
+  }
+
   try {
-    const { products, total, skip,limit } = await getProductsByCategory(category, 0);
+    const { products, total } = await getProductsByCategory(category, 0);
 
     if (!products || products.length === 0) {
       notFound();
