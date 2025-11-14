@@ -37,7 +37,7 @@ export function ProductRating({
             key={star}
             className={cn(
               "mask mask-star-2",
-              star <= roundedRating ? "bg-orange-400" : "bg-base-300"
+              star <= roundedRating ? "bg-orange-400" : ""
             )}
             aria-label={`${star} star`}
             aria-current={star === roundedRating ? "true" : undefined}
@@ -46,7 +46,8 @@ export function ProductRating({
       </div>
       {showReviewCount && (
         <span className="text-sm" aria-label={`${reviewCount} reviews`}>
-          {rating.toFixed(1)} ({reviewCount} {reviewCount === 1 ? "review" : "reviews"})
+          {rating.toFixed(1)} ({reviewCount}{" "}
+          {reviewCount === 1 ? "review" : "reviews"})
         </span>
       )}
     </div>
