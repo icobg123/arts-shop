@@ -1,8 +1,11 @@
 "use client";
 
-import { Search, XIcon, Tag, ArrowUpDown } from "lucide-react";
+import { X } from "lucide-react";
+import { ProductFilters } from "./ProductFilters";
 
-interface ProductFiltersProps {
+interface FilterModalProps {
+  isOpen: boolean;
+  onClose: () => void;
   search: string;
   category: string;
   sortBy: string;
@@ -15,10 +18,11 @@ interface ProductFiltersProps {
   onSortByChange: (value: string) => void;
   onOrderChange: (value: string) => void;
   onClearAll: () => void;
-  inModal?: boolean;
 }
 
-export function ProductFilters({
+export function FilterModal({
+  isOpen,
+  onClose,
   search,
   category,
   sortBy,
@@ -31,21 +35,46 @@ export function ProductFilters({
   onSortByChange,
   onOrderChange,
   onClearAll,
-  inModal = false,
-}: ProductFiltersProps) {
+}: FilterModalProps) {
   return (
-    <div className={inModal ? "" : "sticky top-24"}>
-      <div className={inModal ? "" : "card bg-base-100 shadow-lg"}>
-        <div className={inModal ? "" : "card-body"}>
-          {!inModal && <h2 className="card-title text-lg ">Filters</h2>}
+    <dialog
+      id="filter_modal"
+      className="modal modal-bottom sm:modal-middle z-[60]"
+      open={isOpen}
+    >
+      <div className="modal-box max-w-lg z-[60]">
+        {/* Modal Header */}
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="font-bold text-lg">Filters</h3>
+          <button
+            onClick={onClose}
+            className="btn btn-ghost btn-sm btn-circle"
+            aria-label="Close modal"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
 
+        {/* Filter Content - Remove sticky positioning and card wrapper */}
+        <div className="space-y-4">
           {/* Search Input */}
           <div className="form-control">
             <label className="label">
               <span className="label-text">Search</span>
             </label>
             <label className="input input-bordered flex items-center gap-2">
-              <Search className="h-4 w-4 opacity-70 min-w-5" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 16 16"
+                fill="currentColor"
+                className="h-4 w-4 opacity-70 min-w-5"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+                  clipRule="evenodd"
+                />
+              </svg>
               <input
                 type="text"
                 className="grow"
@@ -59,7 +88,7 @@ export function ProductFilters({
                   className="btn btn-ghost btn-xs btn-circle"
                   aria-label="Clear search"
                 >
-                  <XIcon className="h-4 w-4" />
+                  <X className="h-4 w-4" />
                 </button>
               )}
             </label>
@@ -121,61 +150,52 @@ export function ProductFilters({
             </select>
           </div>
 
-          {/* Active Filters */}
+          {/* Active Filters Section */}
           {(search || category !== "all" || sortBy) && (
-            <div className="mb-1 p-3 bg-base-200 rounded-lg">
+            <div className="p-3 bg-base-200 rounded-lg">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm font-semibold opacity-70">Active:</span>
-                <button
-                  onClick={onClearAll}
-                  className="btn btn-ghost btn-xs"
-                >
+                <button onClick={onClearAll} className="btn btn-ghost btn-xs">
                   Clear All
                 </button>
               </div>
               <div className="flex flex-col gap-2">
                 {search && (
                   <div className="badge badge-primary gap-2 w-full justify-between">
-                    <span className="flex items-center gap-1">
-                      <Search className="h-3 w-3" />
-                      <span className="truncate">{search}</span>
-                    </span>
+                    <span className="truncate">{search}</span>
                     <button
                       onClick={() => onSearchChange("")}
                       className="btn btn-ghost btn-xs bg-transparent"
                       aria-label="Clear search filter"
                     >
-                      <XIcon className="h-2 w-2" />
+                      <X className="h-3 w-3" />
                     </button>
                   </div>
                 )}
                 {category !== "all" && (
                   <div className="badge badge-secondary gap-2 w-full justify-between">
-                    <span className="flex items-center gap-1">
-                      <Tag className="h-3 w-3" />
-                      <span className="truncate">
-                        {category
-                          .split("-")
-                          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                          .join(" ")}
-                      </span>
+                    <span className="truncate">
+                      {category
+                        .split("-")
+                        .map(
+                          (word) => word.charAt(0).toUpperCase() + word.slice(1)
+                        )
+                        .join(" ")}
                     </span>
                     <button
                       onClick={() => onCategoryChange("all")}
                       className="btn btn-ghost btn-xs bg-transparent"
                       aria-label="Clear category filter"
                     >
-                      <XIcon className="h-2 w-2" />
+                      <X className="h-3 w-3" />
                     </button>
                   </div>
                 )}
                 {sortBy && (
                   <div className="badge badge-accent gap-2 w-full justify-between">
-                    <span className="flex items-center gap-1">
-                      <ArrowUpDown className="h-3 w-3" />
-                      <span className="truncate">
-                        {sortBy.charAt(0).toUpperCase() + sortBy.slice(1)} ({order})
-                      </span>
+                    <span className="truncate">
+                      {sortBy.charAt(0).toUpperCase() + sortBy.slice(1)} (
+                      {order})
                     </span>
                     <button
                       onClick={() => {
@@ -185,19 +205,19 @@ export function ProductFilters({
                       className="btn btn-ghost btn-xs bg-transparent"
                       aria-label="Clear sort filter"
                     >
-                      <XIcon className="h-2 w-2" />
+                      <X className="h-3 w-3" />
                     </button>
                   </div>
                 )}
               </div>
             </div>
           )}
+
           {/* Results Count */}
-          <div className="mt-4 pt-4 border-t border-base-300">
+          <div className="pt-4 border-t border-base-300">
             <div className="stat p-0">
               <div className="stat-title text-xs">Total Products</div>
               <div className="stat-value text-2xl">
-
                 {loading ? (
                   <div className="skeleton h-8 w-20"></div>
                 ) : (
@@ -208,6 +228,11 @@ export function ProductFilters({
           </div>
         </div>
       </div>
-    </div>
+
+      {/* Modal Backdrop */}
+      <form method="dialog" className="modal-backdrop z-[55]">
+        <button onClick={onClose}>close</button>
+      </form>
+    </dialog>
   );
 }
