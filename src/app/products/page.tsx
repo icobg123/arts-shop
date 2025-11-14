@@ -28,7 +28,10 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
     getProducts({
       limit: PRODUCTS_PER_PAGE,
       skip,
+      search: params.search || undefined,
       category: params.category === "all" ? undefined : params.category,
+      sortBy: params.sortBy || undefined,
+      order: params.order as "asc" | "desc",
     }),
     getCategories(),
   ]);

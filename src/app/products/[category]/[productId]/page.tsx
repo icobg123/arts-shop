@@ -139,7 +139,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
             />
           </ViewTransition>
 
-          Stock Status
           <div role="status" aria-live="polite">
             {product.stock > 0 ? (
               <div className="badge badge-success">
@@ -151,7 +150,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
             )}
           </div>
 
-          Description
           <section aria-labelledby="description-heading">
             <h2 id="description-heading" className="font-semibold mb-2">
               Description
@@ -181,7 +179,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             returnPolicy={product.returnPolicy}
           />
 
-          Add to Cart Form with Quantity Selector
+
           <AddToCartForm product={product} />
         </div>
       </article>
@@ -200,8 +198,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
           </section>
         </Suspense>
       )}
-
-      Related Products Section with Streaming
       <Suspense fallback={<RelatedProductsSkeleton />}>
         <RelatedProducts category={product.category} excludeId={product.id} />
       </Suspense>

@@ -140,7 +140,7 @@ export function ProductFilters({
                     </span>
                     <button
                       onClick={() => onSearchChange("")}
-                      className="btn btn-ghost btn-xs"
+                      className="btn btn-ghost btn-xs bg-transparent"
                       aria-label="Clear search filter"
                     >
                       <XIcon className="h-2 w-2" />
@@ -160,10 +160,10 @@ export function ProductFilters({
                     </span>
                     <button
                       onClick={() => onCategoryChange("all")}
-                      className="btn btn-ghost btn-xs"
+                      className="btn btn-ghost btn-xs bg-transparent"
                       aria-label="Clear category filter"
                     >
-                      ✕
+                      <XIcon className="h-2 w-2" />
                     </button>
                   </div>
                 )}
@@ -180,10 +180,10 @@ export function ProductFilters({
                         onSortByChange("");
                         onOrderChange("asc");
                       }}
-                      className="btn btn-ghost btn-xs"
+                      className="btn btn-ghost btn-xs bg-transparent"
                       aria-label="Clear sort filter"
                     >
-                      ✕
+                      <XIcon className="h-2 w-2" />
                     </button>
                   </div>
                 )}
@@ -195,8 +195,9 @@ export function ProductFilters({
             <div className="stat p-0">
               <div className="stat-title text-xs">Total Products</div>
               <div className="stat-value text-2xl">
+
                 {loading ? (
-                  <span className="skeleton h-8 w-20"></span>
+                  <div className="skeleton h-8 w-20"></div>
                 ) : (
                   totalProducts
                 )}

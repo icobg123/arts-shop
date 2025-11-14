@@ -73,11 +73,6 @@ export function ProductCard({ product }: ProductCardProps) {
           </figure>
         </ViewTransition>
         <div className="card-body flex-1">
-          {product.brand && (
-            <ViewTransition name={`product-brand-${product.id}`}>
-              <div className="badge badge-primary badge-sm">{product.brand}</div>
-            </ViewTransition>
-          )}
           <ViewTransition name={`product-title-${product.id}`}>
             <h3 className="card-title text-base line-clamp-2">{product.title}</h3>
           </ViewTransition>
@@ -103,6 +98,11 @@ export function ProductCard({ product }: ProductCardProps) {
               )}
             </div>
           </ViewTransition>
+          {product.brand && (
+            <ViewTransition name={`product-brand-${product.id}`}>
+              <div className="badge badge-secondary badge-sm">{product.brand}</div>
+            </ViewTransition>
+          )}
           <div className="card-actions justify-end mt-auto">
             <button
               onClick={handleAddToCart}
