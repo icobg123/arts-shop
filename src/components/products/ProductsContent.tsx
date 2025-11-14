@@ -7,9 +7,9 @@ import { getProducts, getCategories } from "@/lib/api/products";
 import { ProductGridSkeleton } from "@/components/skeletons/ProductGridSkeleton";
 import { ProductCard } from "@/components/product/ProductCard";
 import { Pagination } from "@/components/ui/Pagination";
+import { ProductFilters } from "@/components/products/ProductFilters";
 import type { Product } from "@/lib/schemas/product.schema";
 import { productsSearchParams } from "@/lib/searchParams/products";
-import { Search, XIcon, Tag, ArrowUpDown } from "lucide-react";
 
 const PRODUCTS_PER_PAGE = 20;
 
@@ -139,206 +139,63 @@ export function ProductsContent({
   const totalPages = Math.ceil(totalProducts / PRODUCTS_PER_PAGE);
 
   return (
-    <div className="space-y-6">
-      {/* Active Filters */}
-      {(search || category !== "all" || sortBy) && (
-        <div className="alert bg-base-200 border border-base-300">
-          <div className="w-full">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-semibold opacity-70">Active Filters:</span>
-              <button
-                onClick={() => setQuery({ search: "", category: "all", sortBy: "", order: "asc", page: 1 })}
-                className="btn btn-ghost btn-sm"
-              >
-                Clear All
-              </button>
+    <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      {/* Sidebar Filters */}
+      <aside className="lg:col-span-1">
+        <ProductFilters
+          search={search}
+          category={category}
+          sortBy={sortBy}
+          order={order}
+          categories={categories}
+          totalProducts={totalProducts}
+          loading={loading}
+          onSearchChange={(value) => setQuery({ search: value, page: 1 })}
+          onCategoryChange={(value) => setQuery({ category: value, page: 1 })}
+          onSortByChange={(value) => setQuery({ sortBy: value, page: 1 })}
+          onOrderChange={(value) => setQuery({ order: value, page: 1 })}
+          onClearAll={() => setQuery({ search: "", category: "all", sortBy: "", order: "asc", page: 1 })}
+        />
+      </aside>
+
+      {/* Main Content */}
+      <main className="lg:col-span-3">
+        <div className="space-y-6">
+          {/* Results Count */}
+          {!loading && (
+            <div className="text-sm text-base-content/70">
+              Showing {categoryProducts.length} of {totalProducts} products
+              {search && " (filtered by search)"}
             </div>
-            <div className="flex flex-wrap gap-2">
-              {search && (
-                <div className="badge badge-primary gap-2">
-                  <Search className="h-3 w-3" />
-                  Search: {search}
-                  <button
-                    onClick={() => setQuery({ search: "" })}
-                    className="btn btn-ghost btn-xs"
-                    aria-label="Clear search filter"
-                  >
-                    ✕
-                  </button>
-                </div>
-              )}
-              {category !== "all" && (
-                <div className="badge badge-secondary gap-2">
-                  <Tag className="h-3 w-3" />
-                  Category:{" "}
-                  {category
-                    .split("-")
-                    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                    .join(" ")}
-                  <button
-                    onClick={() => setQuery({ category: "all" })}
-                    className="btn btn-ghost btn-xs"
-                    aria-label="Clear category filter"
-                  >
-                    ✕
-                  </button>
-                </div>
-              )}
-              {sortBy && (
-                <div className="badge badge-accent gap-2">
-                  <ArrowUpDown className="h-3 w-3" />
-                  Sort: {sortBy.charAt(0).toUpperCase() + sortBy.slice(1)} ({order})
-                  <button
-                    onClick={() => setQuery({ sortBy: "", order: "asc" })}
-                    className="btn btn-ghost btn-xs"
-                    aria-label="Clear sort filter"
-                  >
-                    ✕
-                  </button>
-                </div>
-              )}
+          )}
+
+          {/* Products Grid */}
+          <ViewTransition
+            enter="slide-up"
+            exit="slide-down"
+          >
+            {loading ? (
+              <ProductGridSkeleton count={8} />
+            ) : (
+              <ProductsList
+                searchText={search}
+                products={categoryProducts}
+              />
+            )}
+          </ViewTransition>
+
+          {/* Pagination */}
+          {!loading && totalPages > 1 && (
+            <div className="mt-8">
+              <Pagination
+                currentPage={page}
+                totalPages={totalPages}
+                onPageChange={(newPage) => setQuery({ page: newPage })}
+              />
             </div>
-          </div>
+          )}
         </div>
-      )}
-
-      {/* Filters */}
-      <div className="card">
-        <div className="card-body p-0">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {/* Search Input */}
-            <div className="flex flex-col gap-2">
-              <label className="input input-bordered flex items-center gap-2 w-full">
-                <Search className="h-4 w-4 opacity-70 min-w-5"/>
-                <input
-                  type="text"
-                  className="grow"
-                  placeholder="Search products..."
-                  value={search}
-                  onChange={(e) => {
-                    setQuery({ search: e.target.value, page: 1 });
-                  }}
-                />
-                {search && (
-                  <button
-                    onClick={() => setQuery({ search: "", page: 1 })}
-                    className="btn btn-ghost btn-xs btn-circle"
-                    aria-label="Clear search"
-                  >
-                    <XIcon className="h-4 w-4"/>
-                  </button>
-                )}
-                <span className="label">{loading?<span className="h-4 w-6 skeleton"></span>:totalProducts} {totalProducts === 1 ? "product" : "products"} available</span>
-              </label>
-            </div>
-
-            {/* Category Filter */}
-            <div className="flex flex-col gap-2">
-              <label className="select select-bordered flex items-center gap-2 w-full">
-                <span className="label opacity-70">Category</span>
-                <select
-                  className="grow"
-                  value={category}
-                  onChange={(e) => {
-                    setQuery({ category: e.target.value, page: 1 });
-                  }}
-                >
-                  <option value="all">All Categories</option>
-                  {categories.map((cat) => (
-                    <option key={cat} value={cat}>
-                      {cat
-                        .split("-")
-                        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                        .join(" ")}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            </div>
-
-            {/* Sort By Filter */}
-            <div className="flex flex-col gap-2">
-              <label className="select select-bordered flex items-center gap-2 w-full">
-                <span className="label opacity-70">Sort By</span>
-                <select
-                  className="grow"
-                  value={sortBy}
-                  onChange={(e) => {
-                    setQuery({ sortBy: e.target.value, page: 1 });
-                  }}
-                >
-                  <option value="">Default</option>
-                  <option value="title">Title</option>
-                  <option value="price">Price</option>
-                  <option value="rating">Rating</option>
-                  <option value="brand">Brand</option>
-                </select>
-              </label>
-            </div>
-
-            {/* Sort Order Filter */}
-            <div className="flex flex-col gap-2">
-              <label className="select select-bordered flex items-center gap-2 w-full">
-                <span className="label opacity-70">Order</span>
-                <select
-                  className="grow"
-                  value={order}
-                  onChange={(e) => {
-                    setQuery({ order: e.target.value, page: 1 });
-                  }}
-                  disabled={!sortBy}
-                >
-                  <option value="asc">Ascending</option>
-                  <option value="desc">Descending</option>
-                </select>
-              </label>
-            </div>
-          </div>
-
-          {/* Pagination Row */}
-          <div className="mt-4">
-            <Pagination
-              currentPage={page}
-              totalPages={totalPages}
-              onPageChange={(newPage) => setQuery({ page: newPage })}
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Results Count */}
-      {!loading && (
-        <div className="text-sm text-base-content/70">
-          Showing {categoryProducts.length} of {totalProducts} products
-          {search && " (filtered by search)"}
-        </div>
-      )}
-
-      {/* Products Grid */}
-      <ViewTransition
-        enter="slide-up"
-        exit="slide-down"
-      >
-        {loading ? (
-          <ProductGridSkeleton count={8} />
-        ) : (
-          <ProductsList
-            searchText={search}
-            products={categoryProducts}
-          />
-        )}
-      </ViewTransition>
-
-      {/* Pagination */}
-      {!loading && (
-        <div className="mt-8">
-          <Pagination
-            currentPage={page}
-            totalPages={totalPages}
-            onPageChange={(newPage) => setQuery({ page: newPage })}
-          />
-        </div>
-      )}
+      </main>
     </div>
   );
 }

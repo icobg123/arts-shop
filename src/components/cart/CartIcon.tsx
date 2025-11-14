@@ -25,6 +25,18 @@ export default function CartIcon({ onClick, className = "" }: CartIconProps) {
     setPrevCount(totalItems);
   }, [totalItems, hydrated, prevCount]);
 
+  // Listen for cart-updated event from ProductCard
+  useEffect(() => {
+    const handleCartUpdate = () => {
+      setPulse(true);
+      const timer = setTimeout(() => setPulse(false), 600);
+      return () => clearTimeout(timer);
+    };
+
+    window.addEventListener("cart-updated", handleCartUpdate);
+    return () => window.removeEventListener("cart-updated", handleCartUpdate);
+  }, []);
+
   return (
     <button
       onClick={onClick}

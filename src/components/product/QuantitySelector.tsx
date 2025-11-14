@@ -72,7 +72,6 @@ export function QuantitySelector({
           onChange={handleInputChange}
           min={1}
           max={max}
-          aria-valuemin={1}
           aria-valuemax={max}
           aria-valuenow={quantity}
           className="input input-bordered join-item w-20 text-center"

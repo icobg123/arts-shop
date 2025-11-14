@@ -156,7 +156,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <h2 id="description-heading" className="font-semibold mb-2">
               Description
             </h2>
-            <p className="text-base-content/80">{product.description}</p>
+            <ViewTransition name={`product-description-${product.id}`}>
+              <p className="text-base-content/80">{product.description}</p>
+            </ViewTransition>
           </section>
 
           Product Details
