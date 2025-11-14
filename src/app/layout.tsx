@@ -27,13 +27,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning  data-theme="night">
+    <html lang="en" suppressHydrationWarning data-theme="light">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ThemeProvider
           attribute="data-theme"
-          defaultTheme="night"
+          defaultTheme="light"
           enableSystem={true}
           themes={[
             "night",

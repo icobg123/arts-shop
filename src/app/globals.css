@@ -1,8 +1,9 @@
 @import "tailwindcss";
 @plugin "daisyui" {
   /*themes: all;*/
-  themes: light --preferslight, night --default;
-
+  themes:
+    light --default,
+    night --prefersDark;
 }
 
 /* React 19 View Transitions Configuration */
@@ -43,56 +44,50 @@
   }
 }
 
-
 /* No additional animations needed */
-
-
-
-
-
-
-
-
 
 /* Previously defined animations below */
 
-
-
-
-
-
 /* Slide animation for Suspense */
 ::view-transition-old(.slide-down) {
-  animation: 150ms ease-out both fade-out, 150ms ease-out both slide-down;
+  animation:
+    150ms ease-out both fade-out,
+    150ms ease-out both slide-down;
 }
 
 ::view-transition-new(.slide-up) {
-  animation: 210ms ease-in 150ms both fade-in, 400ms ease-in both slide-up;
+  animation:
+    210ms ease-in 150ms both fade-in,
+    400ms ease-in both slide-up;
 }
 
 /* Animations for view transition classed added by transition type */
 ::view-transition-old(.slide-forward) {
   /* when sliding forward, the "old" page should slide out to left. */
-  animation: 150ms cubic-bezier(0.4, 0, 1, 1) both fade-out,
-  400ms cubic-bezier(0.4, 0, 0.2, 1) both slide-to-left;
+  animation:
+    150ms cubic-bezier(0.4, 0, 1, 1) both fade-out,
+    400ms cubic-bezier(0.4, 0, 0.2, 1) both slide-to-left;
 }
 
 ::view-transition-new(.slide-forward) {
   /* when sliding forward, the "new" page should slide in from right. */
-  animation: 210ms cubic-bezier(0, 0, 0.2, 1) 150ms both fade-in,
-  400ms cubic-bezier(0.4, 0, 0.2, 1) both slide-from-right;
+  animation:
+    210ms cubic-bezier(0, 0, 0.2, 1) 150ms both fade-in,
+    400ms cubic-bezier(0.4, 0, 0.2, 1) both slide-from-right;
 }
 
 ::view-transition-old(.slide-back) {
   /* when sliding back, the "old" page should slide out to right. */
-  animation: 150ms cubic-bezier(0.4, 0, 1, 1) both fade-out,
-  400ms cubic-bezier(0.4, 0, 0.2, 1) both slide-to-right;
+  animation:
+    150ms cubic-bezier(0.4, 0, 1, 1) both fade-out,
+    400ms cubic-bezier(0.4, 0, 0.2, 1) both slide-to-right;
 }
 
 ::view-transition-new(.slide-back) {
   /* when sliding back, the "new" page should slide in from left. */
-  animation: 210ms cubic-bezier(0, 0, 0.2, 1) 150ms both fade-in,
-  400ms cubic-bezier(0.4, 0, 0.2, 1) both slide-from-left;
+  animation:
+    210ms cubic-bezier(0, 0, 0.2, 1) 150ms both fade-in,
+    400ms cubic-bezier(0.4, 0, 0.2, 1) both slide-from-left;
 }
 
 /* Keyframes to support our animations above. */
@@ -155,7 +150,6 @@
     transform: translateX(0);
   }
 }
-
 
 /* Default .slow-fade. */
 ::view-transition-old(.slow-fade) {
