@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { unstable_ViewTransition as ViewTransition, useState, useEffect } from 'react';
+import { unstable_ViewTransition as ViewTransition, useEffect, useState } from "react";
 
 
 interface ProductImageGalleryProps {
@@ -66,6 +66,7 @@ export function ProductImageGallery({
   };
 
   return (
+    <ViewTransition>
     <section aria-label="Product images" className="space-y-4">
       {/* Carousel */}
       <div className="carousel w-full aspect-square bg-base-200 rounded-lg overflow-hidden">
@@ -75,6 +76,7 @@ export function ProductImageGallery({
             id={`slide${index + 1}`}
             className="carousel-item relative w-full"
           >
+              <ViewTransition name={`product-image-${productId}`}>
             {productId ? (
                 <Image
                   src={image}
@@ -96,6 +98,7 @@ export function ProductImageGallery({
                 sizes="(max-width: 1023px) calc(100vw - 2rem), calc(50vw - 2rem)"
               />
             )}
+              </ViewTransition>
 
             {/* Navigation Buttons - only show if multiple images */}
             {allImages.length > 1 && (
@@ -157,5 +160,8 @@ export function ProductImageGallery({
         </div>
       )}
     </section>
+
+
+    </ViewTransition>
   );
 }

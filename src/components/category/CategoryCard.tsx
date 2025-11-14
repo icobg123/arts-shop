@@ -22,7 +22,7 @@ export function CategoryCard({
     <article className="card bg-base-100 shadow-md hover:shadow-xl transition-shadow">
       <Link href={getCategoryUrl(slug)}>
         <ViewTransition name={`category-image-${slug}`}>
-          <figure className="relative h-48 bg-base-200">
+          <figure className="relative bg-base-200 aspect-square">
             {featuredImage ? (
               <Image
                 src={featuredImage}

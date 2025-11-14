@@ -49,6 +49,7 @@ export function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
+    <ViewTransition>
     <article className="card bg-base-100 shadow-md hover:shadow-xl transition-shadow ">
       <Link href={getProductUrl(product.category, product.id)} className="flex-1 h-full flex flex-col">
           <ViewTransition name={`product-image-${product.id}`}>
@@ -117,5 +118,6 @@ export function ProductCard({ product }: ProductCardProps) {
         </div>
       </Link>
     </article>
+    </ViewTransition>
   );
 }
