@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Home, FolderOpen, ChevronRight } from "lucide-react";
+import { FolderOpen, Home } from "lucide-react";
 
 export interface BreadcrumbItem {
   label: string;
@@ -14,8 +14,24 @@ interface BreadcrumbProps {
 }
 
 /**
- * Accessible breadcrumb navigation component
+ * Unified breadcrumb navigation component
  * Uses semantic nav element, DaisyUI breadcrumbs styling, and Lucide icons
+ *
+ * @example
+ * // Simple usage
+ * <Breadcrumb items={[
+ *   { label: "Home", href: "/" },
+ *   { label: "Products" }
+ * ]} />
+ *
+ * @example
+ * // Product page usage
+ * <Breadcrumb items={[
+ *   { label: "Home", href: "/" },
+ *   { label: "Categories", href: "/categories" },
+ *   { label: "Electronics", href: "/categories/electronics" },
+ *   { label: "Product Name" }
+ * ]} />
  */
 export function Breadcrumb({
   items,
@@ -35,9 +51,6 @@ export function Breadcrumb({
         <ul>
           {items.map((item, index) => {
             const isLast = index === items.length - 1;
-            const icon = showIcons
-              ? item.icon || getDefaultIcon(index)
-              : null;
 
             return (
               <li key={index} aria-current={isLast ? "page" : undefined}>

@@ -19,7 +19,7 @@ interface ProductCardProps {
  * Product card component for grid and related products
  * Displays product thumbnail, title, rating, and price
  */
-export function ProductCard({ product, index }: ProductCardProps) {
+export function ProductCard({ product, index = 99 }: ProductCardProps) {
   const hasDiscount = product.discountPercentage > 0;
   const originalPrice = hasDiscount
     ? product.price / (1 - product.discountPercentage / 100)
@@ -53,11 +53,11 @@ export function ProductCard({ product, index }: ProductCardProps) {
                 src={product.thumbnail}
                 alt={product.title}
                 fetchPriority={
-                  index ? (index <= 7 ? "high" : "auto") : undefined
+                  index !== 99 ? (index <= 11 ? "high" : "auto") : undefined
                 }
-                priority={index ? index <= 7 : false}
-                fill
-                className="object-cover"
+                priority={index !== 99 ? index <= 11 : false}
+                width={265}
+                height={265}
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
               />
               {hasDiscount && (

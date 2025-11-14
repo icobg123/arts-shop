@@ -89,10 +89,11 @@ export function ProductImageGallery({
                 <Image
                   src={image}
                   alt={`${title} - Image ${index + 1}`}
-                  fill
-                  priority={index === 0}
+                  priority
                   fetchPriority="high"
                   quality={90}
+                  width={800}
+                  height={800}
                   className="object-cover"
                   sizes="(max-width: 1023px) calc(100vw - 2rem), calc(50vw - 2rem)"
                 />
@@ -101,9 +102,11 @@ export function ProductImageGallery({
                   src={image}
                   alt={`${title} - Image ${index + 1}`}
                   fill
-                  priority={index === 0}
+                  priority
                   fetchPriority="high"
                   quality={90}
+                  width={800}
+                  height={800}
                   className="object-cover"
                   sizes="(max-width: 1023px) calc(100vw - 2rem), calc(50vw - 2rem)"
                 />
@@ -160,7 +163,10 @@ export function ProductImageGallery({
                 <Image
                   src={image}
                   alt={`${title} - Image ${index + 1}`}
-                  fill
+                  fetchPriority="high"
+                  width={175}
+                  height={175}
+                  priority
                   className="object-cover"
                   sizes="(max-width: 1024px) 25vw, 12.5vw"
                 />
