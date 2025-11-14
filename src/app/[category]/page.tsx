@@ -1,9 +1,6 @@
 import { unstable_ViewTransition as ViewTransition } from "react";
 import { notFound } from "next/navigation";
-import {
-  getCategories,
-  getProductsByCategory,
-} from "@/lib/api/products";
+import { getCategories, getProductsByCategory } from "@/lib/api/products";
 import { ProductCard } from "@/components/product/ProductCard";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import type { Metadata } from "next";
@@ -72,19 +69,16 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           {/* Category Header */}
           <div className="mb-6">
             <Breadcrumb items={breadcrumbItems} className="mb-4" />
-            <h1 className="text-4xl font-bold mb-2">{categoryName}</h1>
+            <h1 className="mb-2 text-4xl font-bold">{categoryName}</h1>
             <p className="text-base-content/70">
               {total} {total === 1 ? "product" : "products"} available
             </p>
           </div>
 
           {/* Product Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {products.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-              />
+              <ProductCard key={product.id} product={product} />
             ))}
           </div>
         </div>

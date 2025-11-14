@@ -1,7 +1,10 @@
-import React, { Suspense, use, unstable_ViewTransition as ViewTransition } from "react";
+import React, {
+  Suspense,
+  unstable_ViewTransition as ViewTransition,
+  use,
+} from "react";
 import { Product } from "@/types/product";
 import { ProductCard } from "@/components/product/ProductCard";
-
 
 interface RelatedProductsProps {
   category: string;
@@ -13,11 +16,11 @@ interface RelatedProductsProps {
  */
 async function fetchRelatedProducts(
   category: string,
-  excludeId: number,
+  excludeId: number
 ): Promise<Product[]> {
   const response = await fetch(
     `https://dummyjson.com/products/category/${category}?limit=6`,
-    { next: { revalidate: 3600 } },
+    { next: { revalidate: 3600 } }
   );
 
   if (!response.ok) {
@@ -32,23 +35,20 @@ async function fetchRelatedProducts(
  * Related products content using React 19 use() hook
  * This component unwraps the Promise automatically
  */
-function RelatedProductsContent({
-                                  category,
-                                  excludeId,
-                                }: RelatedProductsProps) {
+function RelatedProductsContent({ category, excludeId }: RelatedProductsProps) {
   // React 19 feature: use() unwraps the Promise!
   const products = use(fetchRelatedProducts(category, excludeId));
 
   if (products.length === 0) {
     return (
-      <div className="text-center py-8 text-base-content/60">
+      <div className="py-8 text-center text-base-content/60">
         No related products found.
       </div>
     );
   }
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+    <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
       {products.map((product) => (
         <ProductCard key={product.id} product={product} />
       ))}
@@ -61,16 +61,16 @@ function RelatedProductsContent({
  */
 function RelatedProductsSkeleton() {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+    <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
       {[...Array(6)].map((_, i) => (
         <div key={i} className="card bg-base-100 shadow-md">
-          <div className="skeleton aspect-square w-full"></div>
+          <div className="aspect-square w-full skeleton"></div>
           <div className="card-body gap-2">
-            <div className="skeleton h-3 w-16"></div>
-            <div className="skeleton h-4 w-full"></div>
-            <div className="skeleton h-4 w-3/4"></div>
-            <div className="skeleton h-3 w-20"></div>
-            <div className="skeleton h-6 w-24"></div>
+            <div className="h-3 w-16 skeleton"></div>
+            <div className="h-4 w-full skeleton"></div>
+            <div className="h-4 w-3/4 skeleton"></div>
+            <div className="h-3 w-20 skeleton"></div>
+            <div className="h-6 w-24 skeleton"></div>
           </div>
         </div>
       ))}
@@ -85,11 +85,8 @@ function RelatedProductsSkeleton() {
 export function RelatedProducts({ category, excludeId }: RelatedProductsProps) {
   return (
     <ViewTransition>
-      <section
-        aria-labelledby="related-products-heading"
-        className="mt-16"
-      >
-        <h2 id="related-products-heading" className="text-2xl font-bold mb-6">
+      <section aria-labelledby="related-products-heading" className="mt-16">
+        <h2 id="related-products-heading" className="mb-6 text-2xl font-bold">
           You May Also Like
         </h2>
         <Suspense fallback={<RelatedProductsSkeleton />}>

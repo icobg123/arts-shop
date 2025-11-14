@@ -20,15 +20,15 @@ export function ReviewsList({ reviews }: ReviewsListProps) {
   const [sortBy, setSortBy] = useQueryState(
     "sort",
     parseAsStringLiteral(["recent", "highest", "lowest"] as const).withDefault(
-      "recent",
-    ),
+      "recent"
+    )
   );
 
   const [filterRating, setFilterRating] = useQueryState(
     "rating",
     parseAsStringLiteral(["all", "1", "2", "3", "4", "5"] as const).withDefault(
-      "all",
-    ),
+      "all"
+    )
   );
 
   const [visibleCount, setVisibleCount] = useState(5);
@@ -41,7 +41,7 @@ export function ReviewsList({ reviews }: ReviewsListProps) {
     if (filterRating !== "all") {
       const targetRating = parseInt(filterRating);
       filtered = filtered.filter(
-        (review) => Math.floor(review.rating) === targetRating,
+        (review) => Math.floor(review.rating) === targetRating
       );
     }
 
@@ -66,17 +66,19 @@ export function ReviewsList({ reviews }: ReviewsListProps) {
   const hasMore = visibleCount < filteredAndSortedReviews.length;
 
   const handleShowMore = () => {
-    setVisibleCount((prev) => Math.min(prev + 5, filteredAndSortedReviews.length));
+    setVisibleCount((prev) =>
+      Math.min(prev + 5, filteredAndSortedReviews.length)
+    );
   };
 
   return (
     <div className="space-y-6">
       {/* Filters and Sort */}
-      <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+      <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
         {/* Sort Dropdown */}
 
-          <label htmlFor="sort-reviews" className="select">
-            <span className="label">Sort by</span>
+        <label htmlFor="sort-reviews" className="select">
+          <span className="label">Sort by</span>
           <select
             id="sort-reviews"
             value={sortBy}
@@ -86,13 +88,12 @@ export function ReviewsList({ reviews }: ReviewsListProps) {
             <option value="highest">Highest Rating</option>
             <option value="lowest">Lowest Rating</option>
           </select>
-          </label>
-        
+        </label>
 
         {/* Rating Filter */}
 
-          <label htmlFor="filter-reviews" className="select">
-            <span className="label">Filter by rating</span>
+        <label htmlFor="filter-reviews" className="select">
+          <span className="label">Filter by rating</span>
 
           <select
             id="filter-reviews"
@@ -102,15 +103,14 @@ export function ReviewsList({ reviews }: ReviewsListProps) {
             }}
             className=""
           >
-            <option  value="all">All Stars</option>
+            <option value="all">All Stars</option>
             <option value="5">5 Stars</option>
             <option value="4">4 Stars</option>
             <option value="3">3 Stars</option>
             <option value="2">2 Stars</option>
             <option value="1">1 Star</option>
           </select>
-          </label>
-
+        </label>
       </div>
 
       {/* Results count */}
@@ -126,7 +126,7 @@ export function ReviewsList({ reviews }: ReviewsListProps) {
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
-            className="stroke-info shrink-0 w-6 h-6"
+            className="h-6 w-6 shrink-0 stroke-info"
           >
             <path
               strokeLinecap="round"
@@ -147,10 +147,10 @@ export function ReviewsList({ reviews }: ReviewsListProps) {
 
           {/* Show More Button */}
           {hasMore && (
-            <div className="text-center pt-4">
+            <div className="pt-4 text-center">
               <button
                 onClick={handleShowMore}
-                className="btn btn-outline btn-wide"
+                className="btn btn-wide btn-outline"
               >
                 Show More Reviews
                 <span className="badge badge-sm">

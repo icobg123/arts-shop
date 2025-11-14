@@ -19,10 +19,10 @@ export function CategoryCard({
   productCount,
 }: CategoryCardProps) {
   return (
-    <article className="card bg-base-100 shadow-md hover:shadow-xl transition-shadow">
+    <article className="card bg-base-100 shadow-md transition-shadow hover:shadow-xl">
       <Link href={getCategoryUrl(slug)}>
         <ViewTransition name={`category-image-${slug}`}>
-          <figure className="relative bg-base-200 aspect-square">
+          <figure className="relative aspect-square bg-base-200">
             {featuredImage ? (
               <Image
                 src={featuredImage}
@@ -32,14 +32,14 @@ export function CategoryCard({
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
               />
             ) : (
-              <div className="flex items-center justify-center w-full h-full text-base-content/30">
+              <div className="flex h-full w-full items-center justify-center text-base-content/30">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
                   stroke="currentColor"
-                  className="w-16 h-16"
+                  className="h-16 w-16"
                 >
                   <path
                     strokeLinecap="round"

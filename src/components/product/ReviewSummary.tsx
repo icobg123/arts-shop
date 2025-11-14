@@ -1,6 +1,6 @@
 import { Review } from "@/types/product";
 import { ProductRating } from "./ProductRating";
-import { ListStartIcon, Star } from "lucide-react";
+import { Star } from "lucide-react";
 
 interface ReviewSummaryProps {
   reviews: Review[];

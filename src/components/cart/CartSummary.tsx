@@ -20,7 +20,7 @@ export default function CartSummary() {
   const finalTotal = totalPrice + estimatedTax + shipping;
 
   return (
-    <div className="card bg-base-100 shadow-lg sticky top-24">
+    <div className="card sticky top-24 bg-base-100 shadow-lg">
       <div className="card-body">
         <h2 className="card-title text-lg">Order Summary</h2>
 
@@ -56,7 +56,7 @@ export default function CartSummary() {
           <div className="flex justify-between">
             <span className="text-base-content/60">Shipping</span>
             {shipping === 0 ? (
-              <span className="text-success font-semibold">FREE</span>
+              <span className="font-semibold text-success">FREE</span>
             ) : (
               <span>${shipping.toFixed(2)}</span>
             )}
@@ -72,18 +72,18 @@ export default function CartSummary() {
         <div className="divider my-2"></div>
 
         {/* Total */}
-        <div className="flex justify-between items-center text-lg font-bold">
+        <div className="flex items-center justify-between text-lg font-bold">
           <span>Total</span>
           <span className="text-primary">${finalTotal.toFixed(2)}</span>
         </div>
 
         {/* Checkout Button */}
-        <button className="btn btn-primary btn-block mt-4">
+        <button className="btn mt-4 btn-block btn-primary">
           Proceed to Checkout
         </button>
 
         {/* Additional Info */}
-        <div className="text-xs text-center text-base-content/60 mt-2">
+        <div className="mt-2 text-center text-xs text-base-content/60">
           Secure checkout powered by Stripe
         </div>
       </div>

@@ -39,13 +39,13 @@ export default async function CategoriesPage() {
       <div className="container mx-auto px-4 py-8">
         <div className="mb-6">
           <Breadcrumb items={breadcrumbItems} className="mb-4" />
-          <h1 className="text-4xl font-bold mb-2">Shop by Category</h1>
+          <h1 className="mb-2 text-4xl font-bold">Shop by Category</h1>
           <p className="text-base-content/70">
             Browse our curated collection of categories
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {categoryData.map((category) => (
             <CategoryCard key={category.slug} {...category} />
           ))}

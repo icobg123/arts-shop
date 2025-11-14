@@ -24,17 +24,17 @@ const CartModal = forwardRef<HTMLDialogElement>((props, ref) => {
 
   return (
     <dialog ref={ref} id="cart_modal" className="modal modal-bottom">
-      <div className="modal-box max-h-[85vh] flex flex-col p-0 w-full max-w-full rounded-t-2xl rounded-b-none">
+      <div className="modal-box flex max-h-[85vh] w-full max-w-full flex-col rounded-t-2xl rounded-b-none p-0">
         {/* Header */}
-        <div className="sticky top-0 bg-base-100 z-10 border-b border-base-300 px-4 py-3">
+        <div className="sticky top-0 z-10 border-b border-base-300 bg-base-100 px-4 py-3">
           <div className="flex items-center justify-between">
-            <h3 className="font-bold text-lg">Shopping Cart</h3>
+            <h3 className="text-lg font-bold">Shopping Cart</h3>
             <form method="dialog">
-              <button className="btn btn-sm btn-circle btn-ghost">✕</button>
+              <button className="btn btn-circle btn-ghost btn-sm">✕</button>
             </form>
           </div>
           {hydrated && totalItems > 0 && (
-            <div className="flex items-center gap-2 text-sm text-base-content/60 mt-1">
+            <div className="mt-1 flex items-center gap-2 text-sm text-base-content/60">
               <ShoppingBag className="h-4 w-4" />
               <span>
                 {totalItems} {totalItems === 1 ? "item" : "items"}
@@ -45,18 +45,18 @@ const CartModal = forwardRef<HTMLDialogElement>((props, ref) => {
 
         {/* Loading State */}
         {!hydrated && (
-          <div className="flex-1 p-4 space-y-4">
-            <div className="skeleton h-24 w-full"></div>
-            <div className="skeleton h-24 w-full"></div>
-            <div className="skeleton h-24 w-full"></div>
+          <div className="flex-1 space-y-4 p-4">
+            <div className="h-24 w-full skeleton"></div>
+            <div className="h-24 w-full skeleton"></div>
+            <div className="h-24 w-full skeleton"></div>
           </div>
         )}
 
         {/* Empty Cart */}
         {hydrated && items.length === 0 && (
-          <div className="flex-1 flex flex-col items-center justify-center p-8">
-            <ShoppingBag className="h-16 w-16 text-base-content/30 mb-4" />
-            <p className="text-base-content/60 mb-4">Your cart is empty</p>
+          <div className="flex flex-1 flex-col items-center justify-center p-8">
+            <ShoppingBag className="mb-4 h-16 w-16 text-base-content/30" />
+            <p className="mb-4 text-base-content/60">Your cart is empty</p>
             <form method="dialog">
               <Link href="/" className="btn btn-primary">
                 Shop Now
@@ -68,16 +68,16 @@ const CartModal = forwardRef<HTMLDialogElement>((props, ref) => {
         {/* Cart Items */}
         {hydrated && items.length > 0 && (
           <>
-            <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
+            <div className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
               {items.map((item) => (
                 <CartItem key={item.id} item={item} />
               ))}
             </div>
 
             {/* Order Summary - Sticky Footer */}
-            <div className="sticky bottom-0 bg-base-100 border-t border-base-300 px-4 py-4">
+            <div className="sticky bottom-0 border-t border-base-300 bg-base-100 px-4 py-4">
               {/* Price Breakdown */}
-              <div className="space-y-2 text-sm mb-4">
+              <div className="mb-4 space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span className="text-base-content/60">Subtotal</span>
                   <span>${originalPrice.toFixed(2)}</span>
@@ -98,7 +98,7 @@ const CartModal = forwardRef<HTMLDialogElement>((props, ref) => {
                 <div className="flex justify-between">
                   <span className="text-base-content/60">Shipping</span>
                   {shipping === 0 ? (
-                    <span className="text-success font-semibold">FREE</span>
+                    <span className="font-semibold text-success">FREE</span>
                   ) : (
                     <span>${shipping.toFixed(2)}</span>
                   )}
@@ -114,25 +114,25 @@ const CartModal = forwardRef<HTMLDialogElement>((props, ref) => {
               <div className="divider my-2"></div>
 
               {/* Total */}
-              <div className="flex justify-between items-center text-lg font-bold mb-4">
+              <div className="mb-4 flex items-center justify-between text-lg font-bold">
                 <span>Total</span>
                 <span className="text-primary">${finalTotal.toFixed(2)}</span>
               </div>
 
               {/* Action Buttons */}
               <div className="space-y-2">
-                <button className="btn btn-primary btn-block">
+                <button className="btn btn-block btn-primary">
                   Proceed to Checkout
                 </button>
                 <form method="dialog">
-                  <Link href="/cart" className="btn btn-outline btn-block">
+                  <Link href="/cart" className="btn btn-block btn-outline">
                     View Full Cart
                   </Link>
                 </form>
               </div>
 
               {/* Additional Info */}
-              <div className="text-xs text-center text-base-content/60 mt-3">
+              <div className="mt-3 text-center text-xs text-base-content/60">
                 Secure checkout powered by Stripe
               </div>
             </div>

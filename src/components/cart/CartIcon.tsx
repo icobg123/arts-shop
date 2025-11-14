@@ -40,7 +40,7 @@ export default function CartIcon({ onClick, className = "" }: CartIconProps) {
   return (
     <button
       onClick={onClick}
-      className={`btn btn-ghost btn-circle relative ${className}`}
+      className={`btn relative btn-circle btn-ghost ${className}`}
       aria-label={`Shopping cart with ${totalItems} items`}
       style={{ viewTransitionName: "cart-icon" }}
     >
@@ -50,11 +50,7 @@ export default function CartIcon({ onClick, className = "" }: CartIconProps) {
       />
       {hydrated && totalItems > 0 && (
         <span
-          className={`
-            badge badge-sm badge-primary absolute -right-1 -top-1
-            font-bold
-            ${pulse ? "animate-bounce" : ""}
-          `}
+          className={`absolute -top-1 -right-1 badge badge-sm font-bold badge-primary ${pulse ? "animate-bounce" : ""} `}
         >
           {totalItems > 99 ? "99+" : totalItems}
         </span>

@@ -1,6 +1,6 @@
 import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
-import { CartStore, CartItem } from "@/types/cart";
+import { createJSONStorage, persist } from "zustand/middleware";
+import { CartItem, CartStore } from "@/types/cart";
 import { Product } from "@/types/product";
 
 /**
@@ -26,10 +26,7 @@ export const useCartStore = create<CartStore>()(
             item.id === product.id
               ? {
                   ...item,
-                  quantity: Math.min(
-                    item.quantity + quantity,
-                    item.stock
-                  ),
+                  quantity: Math.min(item.quantity + quantity, item.stock),
                 }
               : item
           );
@@ -49,9 +46,13 @@ export const useCartStore = create<CartStore>()(
         }
 
         // Recalculate computed values
-        const totalItems = newItems.reduce((total, item) => total + item.quantity, 0);
+        const totalItems = newItems.reduce(
+          (total, item) => total + item.quantity,
+          0
+        );
         const totalPrice = newItems.reduce((total, item) => {
-          const discountedPrice = item.price * (1 - item.discountPercentage / 100);
+          const discountedPrice =
+            item.price * (1 - item.discountPercentage / 100);
           return total + discountedPrice * item.quantity;
         }, 0);
 
@@ -62,9 +63,13 @@ export const useCartStore = create<CartStore>()(
         const newItems = get().items.filter((item) => item.id !== productId);
 
         // Recalculate computed values
-        const totalItems = newItems.reduce((total, item) => total + item.quantity, 0);
+        const totalItems = newItems.reduce(
+          (total, item) => total + item.quantity,
+          0
+        );
         const totalPrice = newItems.reduce((total, item) => {
-          const discountedPrice = item.price * (1 - item.discountPercentage / 100);
+          const discountedPrice =
+            item.price * (1 - item.discountPercentage / 100);
           return total + discountedPrice * item.quantity;
         }, 0);
 
@@ -91,9 +96,13 @@ export const useCartStore = create<CartStore>()(
         );
 
         // Recalculate computed values
-        const totalItems = newItems.reduce((total, item) => total + item.quantity, 0);
+        const totalItems = newItems.reduce(
+          (total, item) => total + item.quantity,
+          0
+        );
         const totalPrice = newItems.reduce((total, item) => {
-          const discountedPrice = item.price * (1 - item.discountPercentage / 100);
+          const discountedPrice =
+            item.price * (1 - item.discountPercentage / 100);
           return total + discountedPrice * item.quantity;
         }, 0);
 
@@ -119,9 +128,13 @@ export const useCartStore = create<CartStore>()(
       onRehydrateStorage: () => (state) => {
         if (state) {
           // Recalculate computed values on hydration in case of data inconsistency
-          const totalItems = state.items.reduce((total, item) => total + item.quantity, 0);
+          const totalItems = state.items.reduce(
+            (total, item) => total + item.quantity,
+            0
+          );
           const totalPrice = state.items.reduce((total, item) => {
-            const discountedPrice = item.price * (1 - item.discountPercentage / 100);
+            const discountedPrice =
+              item.price * (1 - item.discountPercentage / 100);
             return total + discountedPrice * item.quantity;
           }, 0);
 

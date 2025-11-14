@@ -1,14 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { Menu, ChevronDown } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import CartIcon from "@/components/cart/CartIcon";
 import CartDropdown from "@/components/cart/CartDropdown";
 import CartModal from "@/components/cart/CartModal";
-import { getCategories, getCategoryUrl } from "@/lib/api/products";
 import { ThemeSwitch } from "@/components/layout/ThemeSwitch";
-import { useCartStore } from "@/store/cartStore";
 
 export default function Header() {
   const [categories, setCategories] = useState<string[]>([]);

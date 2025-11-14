@@ -1,10 +1,10 @@
 import { fetchAPI } from "./client";
 import {
-  ProductSchema,
-  ProductListResponseSchema,
   CategoriesSchema,
   type Product,
   type ProductListResponse,
+  ProductListResponseSchema,
+  ProductSchema,
 } from "@/lib/schemas/product.schema";
 import type { GetProductsParams } from "@/types/api";
 

@@ -1,7 +1,6 @@
 "use client";
 
 import { X } from "lucide-react";
-import { ProductFilters } from "./ProductFilters";
 
 interface FilterModalProps {
   isOpen: boolean;
@@ -39,16 +38,16 @@ export function FilterModal({
   return (
     <dialog
       id="filter_modal"
-      className="modal modal-bottom sm:modal-middle z-[60]"
+      className="modal z-[60] modal-bottom sm:modal-middle"
       open={isOpen}
     >
-      <div className="modal-box max-w-lg z-[60]">
+      <div className="z-[60] modal-box max-w-lg">
         {/* Modal Header */}
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="font-bold text-lg">Filters</h3>
+        <div className="mb-4 flex items-center justify-between">
+          <h3 className="text-lg font-bold">Filters</h3>
           <button
             onClick={onClose}
-            className="btn btn-ghost btn-sm btn-circle"
+            className="btn btn-circle btn-ghost btn-sm"
             aria-label="Close modal"
           >
             <X className="h-5 w-5" />
@@ -62,12 +61,12 @@ export function FilterModal({
             <label className="label">
               <span className="label-text">Search</span>
             </label>
-            <label className="input input-bordered flex items-center gap-2">
+            <label className="input-bordered input flex items-center gap-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 16 16"
                 fill="currentColor"
-                className="h-4 w-4 opacity-70 min-w-5"
+                className="h-4 w-4 min-w-5 opacity-70"
               >
                 <path
                   fillRule="evenodd"
@@ -85,7 +84,7 @@ export function FilterModal({
               {search && (
                 <button
                   onClick={() => onSearchChange("")}
-                  className="btn btn-ghost btn-xs btn-circle"
+                  className="btn btn-circle btn-ghost btn-xs"
                   aria-label="Clear search"
                 >
                   <X className="h-4 w-4" />
@@ -100,7 +99,7 @@ export function FilterModal({
               <span className="label-text">Category</span>
             </label>
             <select
-              className="select select-bordered w-full"
+              className="select-bordered select w-full"
               value={category}
               onChange={(e) => onCategoryChange(e.target.value)}
             >
@@ -122,7 +121,7 @@ export function FilterModal({
               <span className="label-text">Sort By</span>
             </label>
             <select
-              className="select select-bordered w-full"
+              className="select-bordered select w-full"
               value={sortBy}
               onChange={(e) => onSortByChange(e.target.value)}
             >
@@ -140,7 +139,7 @@ export function FilterModal({
               <span className="label-text">Order</span>
             </label>
             <select
-              className="select select-bordered w-full"
+              className="select-bordered select w-full"
               value={order}
               onChange={(e) => onOrderChange(e.target.value)}
               disabled={!sortBy}
@@ -152,20 +151,22 @@ export function FilterModal({
 
           {/* Active Filters Section */}
           {(search || category !== "all" || sortBy) && (
-            <div className="p-3 bg-base-200 rounded-lg">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-semibold opacity-70">Active:</span>
+            <div className="rounded-lg bg-base-200 p-3">
+              <div className="mb-2 flex items-center justify-between">
+                <span className="text-sm font-semibold opacity-70">
+                  Active:
+                </span>
                 <button onClick={onClearAll} className="btn btn-ghost btn-xs">
                   Clear All
                 </button>
               </div>
               <div className="flex flex-col gap-2">
                 {search && (
-                  <div className="badge badge-primary gap-2 w-full justify-between">
+                  <div className="badge w-full justify-between gap-2 badge-primary">
                     <span className="truncate">{search}</span>
                     <button
                       onClick={() => onSearchChange("")}
-                      className="btn btn-ghost btn-xs bg-transparent"
+                      className="btn bg-transparent btn-ghost btn-xs"
                       aria-label="Clear search filter"
                     >
                       <X className="h-3 w-3" />
@@ -173,7 +174,7 @@ export function FilterModal({
                   </div>
                 )}
                 {category !== "all" && (
-                  <div className="badge badge-secondary gap-2 w-full justify-between">
+                  <div className="badge w-full justify-between gap-2 badge-secondary">
                     <span className="truncate">
                       {category
                         .split("-")
@@ -184,7 +185,7 @@ export function FilterModal({
                     </span>
                     <button
                       onClick={() => onCategoryChange("all")}
-                      className="btn btn-ghost btn-xs bg-transparent"
+                      className="btn bg-transparent btn-ghost btn-xs"
                       aria-label="Clear category filter"
                     >
                       <X className="h-3 w-3" />
@@ -192,7 +193,7 @@ export function FilterModal({
                   </div>
                 )}
                 {sortBy && (
-                  <div className="badge badge-accent gap-2 w-full justify-between">
+                  <div className="badge w-full justify-between gap-2 badge-accent">
                     <span className="truncate">
                       {sortBy.charAt(0).toUpperCase() + sortBy.slice(1)} (
                       {order})
@@ -202,7 +203,7 @@ export function FilterModal({
                         onSortByChange("");
                         onOrderChange("asc");
                       }}
-                      className="btn btn-ghost btn-xs bg-transparent"
+                      className="btn bg-transparent btn-ghost btn-xs"
                       aria-label="Clear sort filter"
                     >
                       <X className="h-3 w-3" />
@@ -214,12 +215,12 @@ export function FilterModal({
           )}
 
           {/* Results Count */}
-          <div className="pt-4 border-t border-base-300">
+          <div className="border-t border-base-300 pt-4">
             <div className="stat p-0">
               <div className="stat-title text-xs">Total Products</div>
               <div className="stat-value text-2xl">
                 {loading ? (
-                  <div className="skeleton h-8 w-20"></div>
+                  <div className="h-8 w-20 skeleton"></div>
                 ) : (
                   totalProducts
                 )}

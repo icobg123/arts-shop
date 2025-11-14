@@ -32,10 +32,14 @@ export const ProductSchema = z.object({
   price: z.number().positive(),
   // DummyJSON API returns discountPercentage as decimal (0.16 for 16%)
   // Transform it to percentage (16) for consistency
-  discountPercentage: z.number().min(0).max(100).transform((val) => {
-    // If value is less than 1, assume it's in decimal format and multiply by 100
-    return val < 1 ? val * 100 : val;
-  }),
+  discountPercentage: z
+    .number()
+    .min(0)
+    .max(100)
+    .transform((val) => {
+      // If value is less than 1, assume it's in decimal format and multiply by 100
+      return val < 1 ? val * 100 : val;
+    }),
   rating: z.number().min(0).max(5),
   stock: z.number().int().nonnegative(),
   tags: z.array(z.string()),

@@ -35,13 +35,11 @@ export default async function Home({ searchParams }: HomePageProps) {
     getCategories(),
   ]);
 
-
-
   return (
     <ViewTransition>
       <div className="container mx-auto px-4 py-8">
         <div className="mb-6">
-          <h1 className="text-4xl font-bold mb-2">All Products</h1>
+          <h1 className="mb-2 text-4xl font-bold">All Products</h1>
           <p className="text-base-content/70">
             Browse our complete collection of products
           </p>

@@ -48,7 +48,7 @@ export function QuantitySelector({
   };
 
   return (
-    <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-fit border p-4">
+    <fieldset className="fieldset w-fit rounded-box border border-base-300 bg-base-200 p-4">
       <legend className="fieldset-legend">Quantity</legend>
       <div
         role="group"
@@ -60,7 +60,7 @@ export function QuantitySelector({
           onClick={handleDecrease}
           disabled={quantity <= 1}
           aria-label="Decrease quantity"
-          className="btn btn-outline join-item"
+          className="btn join-item btn-outline"
         >
           −
         </button>
@@ -74,7 +74,7 @@ export function QuantitySelector({
           max={max}
           aria-valuemax={max}
           aria-valuenow={quantity}
-          className="input input-bordered join-item w-20 text-center"
+          className="input-bordered input join-item w-20 text-center"
           readOnly
         />
         <button
@@ -82,7 +82,7 @@ export function QuantitySelector({
           onClick={handleIncrease}
           disabled={quantity >= max}
           aria-label="Increase quantity"
-          className="btn btn-outline join-item"
+          className="btn join-item btn-outline"
         >
           +
         </button>

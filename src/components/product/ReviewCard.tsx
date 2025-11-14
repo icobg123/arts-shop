@@ -38,13 +38,13 @@ export function ReviewCard({ review, index }: ReviewCardProps) {
   const relativeDate = getRelativeTime(review.date);
 
   return (
-    <article className="card bg-base-200" aria-labelledby={`review-${index}-heading`}>
+    <article
+      className="card bg-base-200"
+      aria-labelledby={`review-${index}-heading`}
+    >
       <div className="card-body">
-        <header className="flex items-center gap-3 flex-wrap">
-          <ProductRating
-            rating={review.rating}
-            showReviewCount={false}
-          />
+        <header className="flex flex-wrap items-center gap-3">
+          <ProductRating rating={review.rating} showReviewCount={false} />
           <h3 id={`review-${index}-heading`} className="font-medium">
             {review.reviewerName}
           </h3>
@@ -62,7 +62,7 @@ export function ReviewCard({ review, index }: ReviewCardProps) {
           {relativeDate}
         </time>
 
-        <p className="text-base-content/80 mt-2">{review.comment}</p>
+        <p className="mt-2 text-base-content/80">{review.comment}</p>
       </div>
     </article>
   );

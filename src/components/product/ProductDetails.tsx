@@ -31,7 +31,9 @@ export function ProductDetails({
       <dl className="space-y-3 text-sm">
         <div className="flex justify-between">
           <dt className="text-base-content/60">Category</dt>
-          <dd className="font-medium"><Link href={`/categories/${category}`}>{capitalizedCategory}</Link></dd>
+          <dd className="font-medium">
+            <Link href={`/categories/${category}`}>{capitalizedCategory}</Link>
+          </dd>
         </div>
         <div className="flex justify-between">
           <dt className="text-base-content/60">SKU</dt>

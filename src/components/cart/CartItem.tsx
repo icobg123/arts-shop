@@ -4,7 +4,7 @@ import { useCartStore } from "@/store/cartStore";
 import { getProductUrl } from "@/lib/api/products";
 import Image from "next/image";
 import Link from "next/link";
-import { X, Plus, Minus } from "lucide-react";
+import { Minus, Plus, X } from "lucide-react";
 import { toast } from "sonner";
 import { useOptimistic, useTransition } from "react";
 
@@ -62,46 +62,46 @@ export default function CartItem({ item }: CartItemProps) {
   };
 
   return (
-    <div className="flex gap-4 p-4 bg-base-100 rounded-lg border border-base-300">
+    <div className="flex gap-4 rounded-lg border border-base-300 bg-base-100 p-4">
       {/* Product Image */}
       <Link
         href={getProductUrl(item.category, item.id)}
-        className="relative h-24 w-24 flex-shrink-0 rounded-lg overflow-hidden bg-base-200"
+        className="relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-lg bg-base-200"
       >
         <Image
           src={item.thumbnail}
           alt={item.title}
           fill
-          className="object-cover hover:scale-105 transition-transform"
+          className="object-cover transition-transform hover:scale-105"
           sizes="96px"
         />
       </Link>
 
       {/* Product Details */}
-      <div className="flex-1 min-w-0">
-        <div className="flex justify-between items-start gap-2">
+      <div className="min-w-0 flex-1">
+        <div className="flex items-start justify-between gap-2">
           <div>
             <Link
               href={getProductUrl(item.category, item.id)}
-              className="font-semibold hover:text-primary transition-colors line-clamp-2"
+              className="line-clamp-2 font-semibold transition-colors hover:text-primary"
             >
               {item.title}
             </Link>
             <div className="mt-1 flex items-center gap-2 text-sm">
               {item.discountPercentage > 0 ? (
                 <>
-                  <span className="text-primary font-bold">
+                  <span className="font-bold text-primary">
                     ${discountedPrice.toFixed(2)}
                   </span>
-                  <span className="line-through text-base-content/50">
+                  <span className="text-base-content/50 line-through">
                     ${item.price.toFixed(2)}
                   </span>
-                  <span className="badge badge-success badge-sm">
+                  <span className="badge badge-sm badge-success">
                     -{item.discountPercentage}%
                   </span>
                 </>
               ) : (
-                <span className="text-primary font-bold">
+                <span className="font-bold text-primary">
                   ${item.price.toFixed(2)}
                 </span>
               )}
@@ -111,7 +111,7 @@ export default function CartItem({ item }: CartItemProps) {
           {/* Remove Button */}
           <button
             onClick={handleRemove}
-            className="btn btn-ghost btn-sm btn-circle"
+            className="btn btn-circle btn-ghost btn-sm"
             aria-label={`Remove ${item.title}`}
           >
             <X className="h-5 w-5" />
@@ -124,7 +124,7 @@ export default function CartItem({ item }: CartItemProps) {
             <button
               onClick={() => handleQuantityChange(optimisticQuantity - 1)}
               disabled={isPending || optimisticQuantity <= 1}
-              className="btn btn-sm join-item"
+              className="btn join-item btn-sm"
               aria-label="Decrease quantity"
             >
               <Minus className="h-4 w-4" />
@@ -144,7 +144,7 @@ export default function CartItem({ item }: CartItemProps) {
             <button
               onClick={() => handleQuantityChange(optimisticQuantity + 1)}
               disabled={isPending || optimisticQuantity >= item.stock}
-              className="btn btn-sm join-item"
+              className="btn join-item btn-sm"
               aria-label="Increase quantity"
             >
               <Plus className="h-4 w-4" />
@@ -162,7 +162,7 @@ export default function CartItem({ item }: CartItemProps) {
 
         {/* Stock Warning */}
         {optimisticQuantity >= item.stock * 0.8 && (
-          <p className="text-xs text-warning mt-2">
+          <p className="mt-2 text-xs text-warning">
             Only {item.stock} left in stock
           </p>
         )}

@@ -18,20 +18,20 @@ export default function CartDropdown({ onClose }: CartDropdownProps) {
 
   if (!hydrated) {
     return (
-      <div className="hidden sm:block card card-compact w-80 bg-base-100 p-4 shadow-xl border border-base-300 rounded-box">
-        <div className="skeleton h-32 w-full"></div>
+      <div className="card-compact card hidden w-80 rounded-box border border-base-300 bg-base-100 p-4 shadow-xl sm:block">
+        <div className="h-32 w-full skeleton"></div>
       </div>
     );
   }
 
   if (items.length === 0) {
     return (
-      <div className="hidden sm:block card card-compact w-80 bg-base-100 p-6 shadow-xl border border-base-300 rounded-box">
+      <div className="card-compact card hidden w-80 rounded-box border border-base-300 bg-base-100 p-6 shadow-xl sm:block">
         <div className="text-center">
-          <p className="text-base-content/60 text-sm">Your cart is empty</p>
+          <p className="text-sm text-base-content/60">Your cart is empty</p>
           <Link
             href="/"
-            className="btn btn-primary btn-sm mt-4"
+            className="btn mt-4 btn-sm btn-primary"
             onClick={onClose}
           >
             Shop Now
@@ -51,19 +51,19 @@ export default function CartDropdown({ onClose }: CartDropdownProps) {
   const hasMore = items.length > 3;
 
   return (
-    <div className="hidden sm:block card card-compact w-96 bg-base-100 shadow-xl border border-base-300 rounded-box z-50">
+    <div className="card-compact card z-50 hidden w-96 rounded-box border border-base-300 bg-base-100 shadow-xl sm:block">
       <div className="card-body">
         <h3 className="card-title text-base">Shopping Cart</h3>
 
         {/* Cart Items */}
-        <div className="space-y-3 max-h-64 overflow-y-auto">
+        <div className="max-h-64 space-y-3 overflow-y-auto">
           {displayItems.map((item) => (
             <div
               key={item.id}
               className="flex items-center gap-3 border-b border-base-300 pb-3 last:border-0"
             >
               {/* Thumbnail */}
-              <div className="relative h-16 w-16 flex-shrink-0 rounded-lg overflow-hidden bg-base-200">
+              <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg bg-base-200">
                 <Image
                   src={item.thumbnail}
                   alt={item.title}
@@ -74,8 +74,8 @@ export default function CartDropdown({ onClose }: CartDropdownProps) {
               </div>
 
               {/* Item Details */}
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium truncate">{item.title}</p>
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-medium">{item.title}</p>
                 <div className="flex items-center gap-2 text-xs text-base-content/60">
                   <span>Qty: {item.quantity}</span>
                   <span>•</span>
@@ -93,7 +93,7 @@ export default function CartDropdown({ onClose }: CartDropdownProps) {
               {/* Remove Button */}
               <button
                 onClick={() => handleRemoveItem(item.id, item.title)}
-                className="btn btn-ghost btn-xs btn-circle flex-shrink-0"
+                className="btn btn-circle flex-shrink-0 btn-ghost btn-xs"
                 aria-label={`Remove ${item.title} from cart`}
               >
                 <X className="h-4 w-4" />
@@ -104,14 +104,14 @@ export default function CartDropdown({ onClose }: CartDropdownProps) {
 
         {/* Show "X more items" if there are more */}
         {hasMore && (
-          <p className="text-xs text-base-content/60 text-center">
+          <p className="text-center text-xs text-base-content/60">
             + {items.length - 3} more item{items.length - 3 > 1 ? "s" : ""}
           </p>
         )}
 
         {/* Subtotal */}
         <div className="border-t border-base-300 pt-3">
-          <div className="flex justify-between items-center mb-3">
+          <div className="mb-3 flex items-center justify-between">
             <span className="text-sm font-semibold">Subtotal:</span>
             <span className="text-lg font-bold text-primary">
               ${totalPrice.toFixed(2)}
@@ -122,14 +122,12 @@ export default function CartDropdown({ onClose }: CartDropdownProps) {
           <div className="flex gap-2">
             <Link
               href="/cart"
-              className="btn btn-outline btn-sm flex-1"
+              className="btn flex-1 btn-outline btn-sm"
               onClick={onClose}
             >
               View Cart
             </Link>
-            <button className="btn btn-primary btn-sm flex-1">
-              Checkout
-            </button>
+            <button className="btn flex-1 btn-sm btn-primary">Checkout</button>
           </div>
         </div>
       </div>

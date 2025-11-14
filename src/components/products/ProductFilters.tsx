@@ -1,6 +1,6 @@
 "use client";
 
-import { Search, XIcon, Tag, ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, Search, Tag, XIcon } from "lucide-react";
 
 interface ProductFiltersProps {
   search: string;
@@ -37,15 +37,15 @@ export function ProductFilters({
     <div className={inModal ? "" : "sticky top-24"}>
       <div className={inModal ? "" : "card bg-base-100 shadow-lg"}>
         <div className={inModal ? "" : "card-body"}>
-          {!inModal && <h2 className="card-title text-lg ">Filters</h2>}
+          {!inModal && <h2 className="card-title text-lg">Filters</h2>}
 
           {/* Search Input */}
           <div className="form-control">
             <label className="label">
               <span className="label-text">Search</span>
             </label>
-            <label className="input input-bordered flex items-center gap-2">
-              <Search className="h-4 w-4 opacity-70 min-w-5" />
+            <label className="input-bordered input flex items-center gap-2">
+              <Search className="h-4 w-4 min-w-5 opacity-70" />
               <input
                 type="text"
                 className="grow"
@@ -56,7 +56,7 @@ export function ProductFilters({
               {search && (
                 <button
                   onClick={() => onSearchChange("")}
-                  className="btn btn-ghost btn-xs btn-circle"
+                  className="btn btn-circle btn-ghost btn-xs"
                   aria-label="Clear search"
                 >
                   <XIcon className="h-4 w-4" />
@@ -71,7 +71,7 @@ export function ProductFilters({
               <span className="label-text">Category</span>
             </label>
             <select
-              className="select select-bordered w-full"
+              className="select-bordered select w-full"
               value={category}
               onChange={(e) => onCategoryChange(e.target.value)}
             >
@@ -93,7 +93,7 @@ export function ProductFilters({
               <span className="label-text">Sort By</span>
             </label>
             <select
-              className="select select-bordered w-full"
+              className="select-bordered select w-full"
               value={sortBy}
               onChange={(e) => onSortByChange(e.target.value)}
             >
@@ -111,7 +111,7 @@ export function ProductFilters({
               <span className="label-text">Order</span>
             </label>
             <select
-              className="select select-bordered w-full"
+              className="select-bordered select w-full"
               value={order}
               onChange={(e) => onOrderChange(e.target.value)}
               disabled={!sortBy}
@@ -123,26 +123,25 @@ export function ProductFilters({
 
           {/* Active Filters */}
           {(search || category !== "all" || sortBy) && (
-            <div className="mb-1 p-3 bg-base-200 rounded-lg">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-semibold opacity-70">Active:</span>
-                <button
-                  onClick={onClearAll}
-                  className="btn btn-ghost btn-xs"
-                >
+            <div className="mb-1 rounded-lg bg-base-200 p-3">
+              <div className="mb-2 flex items-center justify-between">
+                <span className="text-sm font-semibold opacity-70">
+                  Active:
+                </span>
+                <button onClick={onClearAll} className="btn btn-ghost btn-xs">
                   Clear All
                 </button>
               </div>
               <div className="flex flex-col gap-2">
                 {search && (
-                  <div className="badge badge-primary gap-2 w-full justify-between">
+                  <div className="badge w-full justify-between gap-2 badge-primary">
                     <span className="flex items-center gap-1">
                       <Search className="h-3 w-3" />
                       <span className="truncate">{search}</span>
                     </span>
                     <button
                       onClick={() => onSearchChange("")}
-                      className="btn btn-ghost btn-xs bg-transparent"
+                      className="btn bg-transparent btn-ghost btn-xs"
                       aria-label="Clear search filter"
                     >
                       <XIcon className="h-2 w-2" />
@@ -150,19 +149,22 @@ export function ProductFilters({
                   </div>
                 )}
                 {category !== "all" && (
-                  <div className="badge badge-secondary gap-2 w-full justify-between">
+                  <div className="badge w-full justify-between gap-2 badge-secondary">
                     <span className="flex items-center gap-1">
                       <Tag className="h-3 w-3" />
                       <span className="truncate">
                         {category
                           .split("-")
-                          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                          .map(
+                            (word) =>
+                              word.charAt(0).toUpperCase() + word.slice(1)
+                          )
                           .join(" ")}
                       </span>
                     </span>
                     <button
                       onClick={() => onCategoryChange("all")}
-                      className="btn btn-ghost btn-xs bg-transparent"
+                      className="btn bg-transparent btn-ghost btn-xs"
                       aria-label="Clear category filter"
                     >
                       <XIcon className="h-2 w-2" />
@@ -170,11 +172,12 @@ export function ProductFilters({
                   </div>
                 )}
                 {sortBy && (
-                  <div className="badge badge-accent gap-2 w-full justify-between">
+                  <div className="badge w-full justify-between gap-2 badge-accent">
                     <span className="flex items-center gap-1">
                       <ArrowUpDown className="h-3 w-3" />
                       <span className="truncate">
-                        {sortBy.charAt(0).toUpperCase() + sortBy.slice(1)} ({order})
+                        {sortBy.charAt(0).toUpperCase() + sortBy.slice(1)} (
+                        {order})
                       </span>
                     </span>
                     <button
@@ -182,7 +185,7 @@ export function ProductFilters({
                         onSortByChange("");
                         onOrderChange("asc");
                       }}
-                      className="btn btn-ghost btn-xs bg-transparent"
+                      className="btn bg-transparent btn-ghost btn-xs"
                       aria-label="Clear sort filter"
                     >
                       <XIcon className="h-2 w-2" />
@@ -193,13 +196,12 @@ export function ProductFilters({
             </div>
           )}
           {/* Results Count */}
-          <div className="mt-4 pt-4 border-t border-base-300">
+          <div className="mt-4 border-t border-base-300 pt-4">
             <div className="stat p-0">
               <div className="stat-title text-xs">Total Products</div>
               <div className="stat-value text-2xl">
-
                 {loading ? (
-                  <div className="skeleton h-8 w-20"></div>
+                  <div className="h-8 w-20 skeleton"></div>
                 ) : (
                   totalProducts
                 )}
