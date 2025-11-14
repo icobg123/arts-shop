@@ -5,7 +5,7 @@ import { getProductUrl } from "@/lib/api/products";
 import Image from "next/image";
 import Link from "next/link";
 import { X, Plus, Minus } from "lucide-react";
-import { toast } from "react-hot-toast";
+import { toast } from "sonner";
 import { useOptimistic, useTransition } from "react";
 
 interface CartItemProps {
@@ -49,9 +49,9 @@ export default function CartItem({ item }: CartItemProps) {
       setOptimisticQuantity(newQuantity);
       try {
         updateQuantity(item.id, newQuantity);
-        toast.success("Quantity updated");
+        toast.success(`Updated ${item.title} quantity`);
       } catch (error) {
-        toast.error("Failed to update quantity");
+        toast.error(`Failed to update ${item.title} quantity`);
       }
     });
   };

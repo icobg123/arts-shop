@@ -1,10 +1,14 @@
 "use client";
 
 import { useQueryStates } from "nuqs";
-import { useEffect, useState, startTransition, useRef } from "react";
-import { unstable_ViewTransition as ViewTransition } from "react";
-import { getProducts, getCategories } from "@/lib/api/products";
-import { ProductGridSkeleton } from "@/components/skeletons/ProductGridSkeleton";
+import {
+  startTransition,
+  unstable_ViewTransition as ViewTransition,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { getProducts } from "@/lib/api/products";
 import { ProductCard } from "@/components/product/ProductCard";
 import { Pagination } from "@/components/ui/Pagination";
 import { ProductFilters } from "@/components/products/ProductFilters";
@@ -14,32 +18,21 @@ import { productsSearchParams } from "@/lib/searchParams/products";
 const PRODUCTS_PER_PAGE = 20;
 
 // ProductsList component - now displays server-filtered products
-function ProductsList({
-  products
-}: {
-  products: Product[];
-}) {
+function ProductsList({ products }: { products: Product[] }) {
   return (
     <>
       {products.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {products.map((product) => (
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {products.map((product, index) => (
             // Animate each item in list ("what")
-            <ViewTransition
-              key={product.id}
-              enter="slide-up"
-              exit="slide-down"
-            >
-              <ProductCard product={product} />
+            <ViewTransition key={product.id} enter="slide-up" exit="slide-down">
+              <ProductCard product={product} index={index} />
             </ViewTransition>
           ))}
         </div>
       ) : (
-        <ViewTransition
-          enter="slide-up"
-          exit="slide-down"
-        >
-          <div className="text-center py-12">
+        <ViewTransition enter="slide-up" exit="slide-down">
+          <div className="py-12 text-center">
             <p className="text-lg text-base-content/70">No products found</p>
           </div>
         </ViewTransition>
@@ -59,11 +52,11 @@ export function ProductsContent({
   initialTotal,
   initialCategories,
 }: ProductsContentProps) {
-  const [{ search, category, page, sortBy, order }, setQuery] = useQueryStates(
-    productsSearchParams
-  );
+  const [{ search, category, page, sortBy, order }, setQuery] =
+    useQueryStates(productsSearchParams);
 
-  const [categoryProducts, setCategoryProducts] = useState<Product[]>(initialProducts);
+  const [categoryProducts, setCategoryProducts] =
+    useState<Product[]>(initialProducts);
   const [categories] = useState<string[]>(initialCategories);
   const [loading, setLoading] = useState(false);
   const [totalProducts, setTotalProducts] = useState(initialTotal);
@@ -129,7 +122,7 @@ export function ProductsContent({
   const totalPages = Math.ceil(totalProducts / PRODUCTS_PER_PAGE);
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
       {/* Sidebar Filters */}
       <aside className="lg:col-span-1">
         <ProductFilters
@@ -146,7 +139,13 @@ export function ProductsContent({
           onOrderChange={(value) => setQuery({ order: value, page: 1 })}
           onClearAll={() => {
             setSearchInput("");
-            setQuery({ search: "", category: "all", sortBy: "", order: "asc", page: 1 });
+            setQuery({
+              search: "",
+              category: "all",
+              sortBy: "",
+              order: "asc",
+              page: 1,
+            });
           }}
         />
       </aside>
@@ -163,13 +162,8 @@ export function ProductsContent({
           {/*)}*/}
 
           {/* Products Grid */}
-          <ViewTransition
-            enter="slide-up"
-            exit="slide-down"
-          >
-            <ProductsList
-              products={categoryProducts}
-            />
+          <ViewTransition enter="slide-up" exit="slide-down">
+            <ProductsList products={categoryProducts} />
           </ViewTransition>
 
           {/* Pagination */}

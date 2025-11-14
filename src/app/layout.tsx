@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
-import { Toaster } from "react-hot-toast";
+import { Toaster } from "sonner";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import Header from "@/components/layout/Header";
 
@@ -56,7 +56,7 @@ export default function RootLayout({
           <NuqsAdapter>
             <Header />
             {children}
-            <Toaster position="bottom-right" />
+            <Toaster position="top-center" richColors />
           </NuqsAdapter>
         </ThemeProvider>
       </body>

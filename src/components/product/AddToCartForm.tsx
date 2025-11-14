@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 import { Product } from "@/types/product";
 import { useCartStore } from "@/store/cartStore";
 import { QuantitySelector } from "./QuantitySelector";
@@ -31,24 +31,12 @@ export function AddToCartForm({ product }: AddToCartFormProps) {
       addItem(product, qty);
 
       if (isInCart) {
-        toast("Quantity updated in cart", {
-          icon: "📦",
-          duration: 2000,
-          position: "bottom-right",
-        });
+        toast.info(`Updated ${product.title} quantity in cart`);
       } else {
-        toast.success("Added to cart!", {
-          icon: "🛒",
-          duration: 2000,
-          position: "bottom-right",
-        });
+        toast.success(`Added ${product.title} to cart!`);
       }
     } catch (error) {
-      toast.error("Failed to add to cart", {
-        icon: "❌",
-        duration: 3000,
-        position: "bottom-right",
-      });
+      toast.error(`Failed to add ${product.title} to cart`);
     }
   }
 
