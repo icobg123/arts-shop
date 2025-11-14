@@ -14,7 +14,7 @@ export function ProductPrice({ price, discountPercentage = 0 }: ProductPriceProp
     : price;
 
   return (
-    <div className="space-y-1" role="region" aria-label="Pricing information">
+    <div className="space-y-0.5" role="region" aria-label="Pricing information">
       <div className="flex items-center gap-3">
         <span className="text-3xl font-bold" aria-label={`Current price: $${price.toFixed(2)}`}>
           ${price.toFixed(2)}

@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 interface ProductDetailsProps {
   category: string;
   sku: string;
@@ -17,6 +19,10 @@ export function ProductDetails({
   weight,
   minimumOrderQuantity,
 }: ProductDetailsProps) {
+  const capitalizedCategory = category
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
   return (
     <section aria-labelledby="product-details-heading">
       <h2 id="product-details-heading" className="sr-only">
@@ -25,7 +31,7 @@ export function ProductDetails({
       <dl className="space-y-3 text-sm">
         <div className="flex justify-between">
           <dt className="text-base-content/60">Category</dt>
-          <dd className="font-medium">{category}</dd>
+          <dd className="font-medium"><Link href={`/categories/${category}`}>{capitalizedCategory}</Link></dd>
         </div>
         <div className="flex justify-between">
           <dt className="text-base-content/60">SKU</dt>

@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import { useQueryState, parseAsStringLiteral } from "nuqs";
+import { useMemo, useState } from "react";
+import { parseAsStringLiteral, useQueryState } from "nuqs";
 import { Review } from "@/types/product";
 import { ReviewCard } from "./ReviewCard";
 
@@ -74,24 +74,23 @@ export function ReviewsList({ reviews }: ReviewsListProps) {
       {/* Filters and Sort */}
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
         {/* Sort Dropdown */}
-        <div className="form-control w-full sm:w-auto">
+
           <label htmlFor="sort-reviews" className="select">
             <span className="label">Sort by</span>
           <select
             id="sort-reviews"
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as SortOption)}
-            className="select select-bordered w-full sm:w-auto"
           >
             <option value="recent">Most Recent</option>
             <option value="highest">Highest Rating</option>
             <option value="lowest">Lowest Rating</option>
           </select>
           </label>
-        </div>
+        
 
         {/* Rating Filter */}
-        <div className="form-control w-full sm:w-auto">
+
           <label htmlFor="filter-reviews" className="select">
             <span className="label">Filter by rating</span>
 
@@ -101,9 +100,9 @@ export function ReviewsList({ reviews }: ReviewsListProps) {
             onChange={(e) => {
               setFilterRating(e.target.value as RatingFilterValue);
             }}
-            className="select select-bordered w-full sm:w-auto"
+            className=""
           >
-            <option value="all">All Stars</option>
+            <option  value="all">All Stars</option>
             <option value="5">5 Stars</option>
             <option value="4">4 Stars</option>
             <option value="3">3 Stars</option>
@@ -111,7 +110,7 @@ export function ReviewsList({ reviews }: ReviewsListProps) {
             <option value="1">1 Star</option>
           </select>
           </label>
-        </div>
+
       </div>
 
       {/* Results count */}

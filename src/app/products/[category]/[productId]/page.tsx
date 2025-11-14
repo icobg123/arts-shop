@@ -2,7 +2,14 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { getProduct, getProducts } from "@/lib/api/products";
-import { AddToCartForm, ProductBreadcrumb, ProductDetails, ProductImageGallery, ProductInfo, ProductPrice, ProductRating,
+import {
+  AddToCartForm,
+  ProductBreadcrumb,
+  ProductDetails,
+  ProductImageGallery,
+  ProductInfo,
+  ProductPrice,
+  ProductRating,
   RelatedProducts,
   ReviewsList,
   ReviewSummary
@@ -105,20 +112,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
         />
 
         {/* Right Column - Product Info */}
-        <div className="space-y-6">
-          Brand Badge
-          {product.brand && (
-            <ViewTransition name={`product-brand-${product.id}`}>
-              <div
-                className="badge badge-primary"
-                aria-label={`Brand: ${product.brand}`}
-              >
-                {product.brand}
-              </div>
-            </ViewTransition>
-          )}
-
-          Product Title
+        <div className="space-y-4">
           <ViewTransition name={`product-title-${product.id}`}>
             <h1 className="text-4xl font-bold">{product.title}</h1>
           </ViewTransition>
@@ -151,7 +145,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
           </div>
 
           <section aria-labelledby="description-heading">
-            <h2 id="description-heading" className="font-semibold mb-2">
+            <h2 id="description-heading" className="mb-2">
               Description
             </h2>
             <ViewTransition name={`product-description-${product.id}`}>

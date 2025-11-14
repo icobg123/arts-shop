@@ -51,7 +51,7 @@ export default function CartDropdown({ onClose }: CartDropdownProps) {
   const hasMore = items.length > 3;
 
   return (
-    <div className="card card-compact w-96 bg-base-100 shadow-xl border border-base-300 rounded-box">
+    <div className="card card-compact w-96 bg-base-100 shadow-xl border border-base-300 rounded-box z-50">
       <div className="card-body">
         <h3 className="card-title text-base">Shopping Cart</h3>
 
