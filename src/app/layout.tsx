@@ -35,23 +35,7 @@ export default function RootLayout({
           attribute="data-theme"
           defaultTheme="light"
           enableSystem={true}
-          themes={[
-            "night",
-            "night",
-            "forest",
-            "synthwave",
-            "retro",
-            "cyberpunk",
-            "valentine",
-            "halloween",
-            "garden",
-            "business",
-            "acid",
-            "lemonade",
-            "winter",
-            "black",
-            "light",
-          ]}
+          themes={["night", "light"]}
         >
           <NuqsAdapter>
             <Header />
