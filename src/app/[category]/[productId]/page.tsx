@@ -18,6 +18,7 @@ import { Suspense, unstable_ViewTransition as ViewTransition } from "react";
 import { ReviewsSkeleton } from "@/components/skeletons/ReviewsSkeleton";
 import { RelatedProductsSkeleton } from "@/components/skeletons/RelatedProductsSkeleton";
 
+export const revalidate = 86400;
 interface ProductPageProps {
   params: Promise<{
     category: string;

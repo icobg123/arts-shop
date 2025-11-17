@@ -4,6 +4,7 @@ import { CategoryCard } from "@/components/category/CategoryCard";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import type { Metadata } from "next";
 
+export const revalidate = 86400;
 export const metadata: Metadata = {
   title: "Categories - Browse by Category",
   description:

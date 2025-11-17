@@ -45,47 +45,42 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     notFound();
   }
 
-  try {
-    const { products, total } = await getProductsByCategory(category, 0);
+  const { products, total } = await getProductsByCategory(category, 0);
 
-    if (!products || products.length === 0) {
-      notFound();
-    }
-
-    const categoryName = category
-      .split("-")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
-
-    const breadcrumbItems = [
-      { label: "Home", href: "/" },
-      { label: "Categories", href: "/categories" },
-      { label: categoryName },
-    ];
-
-    return (
-      <ViewTransition>
-        <div className="container mx-auto px-4 py-8">
-          {/* Category Header */}
-          <div className="mb-6">
-            <Breadcrumb items={breadcrumbItems} className="mb-4" />
-            <h1 className="mb-2 text-4xl font-bold">{categoryName}</h1>
-            <p className="text-base-content/70">
-              {total} {total === 1 ? "product" : "products"} available
-            </p>
-          </div>
-
-          {/* Product Grid */}
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {products.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
-        </div>
-      </ViewTransition>
-    );
-  } catch (error) {
-    console.error("Error fetching category:", error);
+  if (!products || products.length === 0) {
     notFound();
   }
+
+  const categoryName = category
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+
+  const breadcrumbItems = [
+    { label: "Home", href: "/" },
+    { label: "Categories", href: "/categories" },
+    { label: categoryName },
+  ];
+
+  return (
+    <ViewTransition>
+      <div className="container mx-auto px-4 py-8">
+        {/* Category Header */}
+        <div className="mb-6">
+          <Breadcrumb items={breadcrumbItems} className="mb-4" />
+          <h1 className="mb-2 text-4xl font-bold">{categoryName}</h1>
+          <p className="text-base-content/70">
+            {total} {total === 1 ? "product" : "products"} available
+          </p>
+        </div>
+
+        {/* Product Grid */}
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {products.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+      </div>
+    </ViewTransition>
+  );
 }
