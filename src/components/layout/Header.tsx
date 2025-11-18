@@ -8,28 +8,9 @@ import CartModal from "@/components/cart/CartModal";
 import { ThemeSwitch } from "@/components/layout/ThemeSwitch";
 
 export default function Header() {
-  const [categories, setCategories] = useState<string[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const cartDropdownRef = useRef<HTMLDivElement>(null);
   const cartModalRef = useRef<HTMLDialogElement>(null);
-
-  // Subscribe to cart changes to optionally auto-open dropdown
-  // const totalItems = useCartStore((state) => state.totalItems);
-  // const [prevTotalItems, setPrevTotalItems] = useState(0);
-
-  /*// Auto-open dropdown when items are added to cart
-  useEffect(() => {
-    if (totalItems > prevTotalItems && totalItems > 0) {
-      setIsCartOpen(true);
-      // Auto-close after 3 seconds
-      const timer = setTimeout(() => {
-        setIsCartOpen(false);
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-    setPrevTotalItems(totalItems);
-  }, [totalItems, prevTotalItems]);*/
 
   // Click-outside detection for cart dropdown
   useEffect(() => {

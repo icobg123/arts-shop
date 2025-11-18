@@ -72,10 +72,7 @@ export function QuantitySelector({
           onChange={handleInputChange}
           min={1}
           max={max}
-          aria-valuemax={max}
-          aria-valuenow={quantity}
           className="input-bordered input join-item w-20 text-center"
-          readOnly
         />
         <button
           type="button"

@@ -24,6 +24,24 @@ npm run dev
 
 ---
 
+## 🧪 Testing
+
+```bash
+# Run tests in watch mode
+npm test
+
+# Run tests with coverage report
+npm run test:coverage
+```
+
+**Test Suite:**
+- **174 tests** across cart store, components, schemas, and utilities
+- **94%+ coverage** (statements, lines, functions)
+- **Vitest** with React Testing Library for component testing
+- **GitHub Actions** CI workflow on push/PR
+
+---
+
 ## 🛠️ Tech Stack
 
 - **Next.js 15** - App Router, Turbopack, async request APIs
@@ -69,15 +87,15 @@ npm run dev
 
 - No authentication, checkout flow, or real backend (DummyJSON mock API)
 - Static generation works for ~194 products but would need ISR/dynamic rendering for larger catalogs (10k+ products)
-- No automated tests (would add Vitest + React Testing Library + Playwright for production)
 - No i18n, analytics, or error boundaries
 - There's an issue with the transitions on mobile while the Filter modal is open.
-  **Production Additions:**
+
+**Production Additions:**
 
 - Backend: Node.js API, PostgreSQL, Redis caching
 - Auth: NextAuth.js with JWT tokens
 - Payments: Stripe integration
-- Testing: 80%+ coverage with unit, integration, and E2E tests
+- Testing: Expand to E2E with Playwright for critical user flows
 - Advanced features: Real-time inventory (WebSockets), product variants, multi-language support
 
 ---
