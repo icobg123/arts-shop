@@ -50,6 +50,7 @@ export default function CartItem({ item }: CartItemProps) {
       try {
         updateQuantity(item.id, newQuantity);
         toast.success(`Updated ${item.title} quantity`);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
         toast.error(`Failed to update ${item.title} quantity`);
       }

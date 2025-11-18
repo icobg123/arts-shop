@@ -35,10 +35,11 @@ npm run test:coverage
 ```
 
 **Test Suite:**
-- **174 tests** across cart store, components, schemas, and utilities
-- **94%+ coverage** (statements, lines, functions)
+- **248 tests** across cart store, components, schemas, and utilities
+- **97%+ coverage** (statements, branches, functions, lines)
 - **Vitest** with React Testing Library for component testing
 - **GitHub Actions** CI workflow on push/PR
+- Tests cover assignment-critical features: ProductCard, Header, AddToCartForm
 
 ---
 

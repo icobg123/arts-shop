@@ -35,6 +35,7 @@ export function AddToCartForm({ product }: AddToCartFormProps) {
       } else {
         toast.success(`Added ${product.title} to cart!`);
       }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       toast.error(`Failed to add ${product.title} to cart`);
     }

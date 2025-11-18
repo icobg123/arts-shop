@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Pagination } from "../Pagination";
@@ -17,7 +17,7 @@ describe("Pagination Component", () => {
           currentPage={1}
           totalPages={1}
           onPageChange={mockOnPageChange}
-        />,
+        />
       );
 
       expect(container.firstChild).toBeNull();
@@ -29,7 +29,7 @@ describe("Pagination Component", () => {
           currentPage={1}
           totalPages={0}
           onPageChange={mockOnPageChange}
-        />,
+        />
       );
 
       expect(container.firstChild).toBeNull();
@@ -41,7 +41,7 @@ describe("Pagination Component", () => {
           currentPage={1}
           totalPages={5}
           onPageChange={mockOnPageChange}
-        />,
+        />
       );
 
       expect(screen.getByText("1")).toBeInTheDocument();
@@ -57,7 +57,7 @@ describe("Pagination Component", () => {
           currentPage={2}
           totalPages={5}
           onPageChange={mockOnPageChange}
-        />,
+        />
       );
 
       expect(screen.getByLabelText("Previous page")).toBeInTheDocument();
@@ -70,7 +70,7 @@ describe("Pagination Component", () => {
           currentPage={3}
           totalPages={5}
           onPageChange={mockOnPageChange}
-        />,
+        />
       );
 
       const currentPageBtn = screen.getByText("3");
@@ -87,7 +87,7 @@ describe("Pagination Component", () => {
           currentPage={1}
           totalPages={5}
           onPageChange={mockOnPageChange}
-        />,
+        />
       );
 
       const prevBtn = screen.getByLabelText("Previous page");
@@ -100,7 +100,7 @@ describe("Pagination Component", () => {
           currentPage={3}
           totalPages={5}
           onPageChange={mockOnPageChange}
-        />,
+        />
       );
 
       const prevBtn = screen.getByLabelText("Previous page");
@@ -114,7 +114,7 @@ describe("Pagination Component", () => {
           currentPage={3}
           totalPages={5}
           onPageChange={mockOnPageChange}
-        />,
+        />
       );
 
       const prevBtn = screen.getByLabelText("Previous page");
@@ -131,7 +131,7 @@ describe("Pagination Component", () => {
           currentPage={5}
           totalPages={5}
           onPageChange={mockOnPageChange}
-        />,
+        />
       );
 
       const nextBtn = screen.getByLabelText("Next page");
@@ -144,7 +144,7 @@ describe("Pagination Component", () => {
           currentPage={3}
           totalPages={5}
           onPageChange={mockOnPageChange}
-        />,
+        />
       );
 
       const nextBtn = screen.getByLabelText("Next page");
@@ -158,7 +158,7 @@ describe("Pagination Component", () => {
           currentPage={3}
           totalPages={5}
           onPageChange={mockOnPageChange}
-        />,
+        />
       );
 
       const nextBtn = screen.getByLabelText("Next page");
@@ -176,7 +176,7 @@ describe("Pagination Component", () => {
           currentPage={1}
           totalPages={5}
           onPageChange={mockOnPageChange}
-        />,
+        />
       );
 
       const page4Btn = screen.getByText("4");
@@ -192,7 +192,7 @@ describe("Pagination Component", () => {
           currentPage={3}
           totalPages={5}
           onPageChange={mockOnPageChange}
-        />,
+        />
       );
 
       const page3Btn = screen.getByText("3");
@@ -209,7 +209,7 @@ describe("Pagination Component", () => {
           currentPage={1}
           totalPages={10}
           onPageChange={mockOnPageChange}
-        />,
+        />
       );
 
       expect(screen.getByText("1")).toBeInTheDocument();
@@ -224,7 +224,7 @@ describe("Pagination Component", () => {
           totalPages={10}
           onPageChange={mockOnPageChange}
           maxButtons={3}
-        />,
+        />
       );
 
       expect(screen.getByText("1")).toBeInTheDocument();
@@ -240,7 +240,7 @@ describe("Pagination Component", () => {
           totalPages={10}
           onPageChange={mockOnPageChange}
           maxButtons={5}
-        />,
+        />
       );
 
       // Should show pages 3, 4, 5, 6, 7 (centered on 5)
@@ -257,7 +257,7 @@ describe("Pagination Component", () => {
           totalPages={10}
           onPageChange={mockOnPageChange}
           maxButtons={5}
-        />,
+        />
       );
 
       // Should show pages 1, 2, 3, 4, 5
@@ -273,7 +273,7 @@ describe("Pagination Component", () => {
           totalPages={10}
           onPageChange={mockOnPageChange}
           maxButtons={5}
-        />,
+        />
       );
 
       // Should show pages 6, 7, 8, 9, 10
@@ -289,7 +289,7 @@ describe("Pagination Component", () => {
           totalPages={3}
           onPageChange={mockOnPageChange}
           maxButtons={5}
-        />,
+        />
       );
 
       expect(screen.getByText("1")).toBeInTheDocument();
@@ -305,7 +305,7 @@ describe("Pagination Component", () => {
           currentPage={1}
           totalPages={2}
           onPageChange={mockOnPageChange}
-        />,
+        />
       );
 
       expect(screen.getByText("1")).toBeInTheDocument();
@@ -319,7 +319,7 @@ describe("Pagination Component", () => {
           totalPages={200}
           onPageChange={mockOnPageChange}
           maxButtons={5}
-        />,
+        />
       );
 
       // Should show pages 98, 99, 100, 101, 102
@@ -334,7 +334,7 @@ describe("Pagination Component", () => {
           totalPages={5}
           onPageChange={mockOnPageChange}
           maxButtons={1}
-        />,
+        />
       );
 
       expect(screen.getByText("3")).toBeInTheDocument();
@@ -348,7 +348,7 @@ describe("Pagination Component", () => {
           currentPage={10}
           totalPages={10}
           onPageChange={mockOnPageChange}
-        />,
+        />
       );
 
       const nextBtn = screen.getByLabelText("Next page");
@@ -364,7 +364,7 @@ describe("Pagination Component", () => {
           currentPage={1}
           totalPages={10}
           onPageChange={mockOnPageChange}
-        />,
+        />
       );
 
       const nextBtn = screen.getByLabelText("Next page");
@@ -382,7 +382,7 @@ describe("Pagination Component", () => {
           currentPage={3}
           totalPages={5}
           onPageChange={mockOnPageChange}
-        />,
+        />
       );
 
       const currentPageBtn = screen.getByText("3");
@@ -395,7 +395,7 @@ describe("Pagination Component", () => {
           currentPage={3}
           totalPages={5}
           onPageChange={mockOnPageChange}
-        />,
+        />
       );
 
       const page2Btn = screen.getByText("2");
@@ -408,7 +408,7 @@ describe("Pagination Component", () => {
           currentPage={3}
           totalPages={5}
           onPageChange={mockOnPageChange}
-        />,
+        />
       );
 
       expect(screen.getByLabelText("Previous page")).toBeInTheDocument();
