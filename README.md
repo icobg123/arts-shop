@@ -24,6 +24,38 @@ npm run dev
 
 ---
 
+## 📁 Project Structure
+
+```
+src/
+├── app/                        # Next.js App Router pages
+│   ├── [category]/            # Category pages
+│   │   └── [productId]/       # Product detail pages
+│   ├── cart/                  # Shopping cart page
+│   └── categories/            # Categories listing page
+├── components/                 # React components
+│   ├── cart/                  # Cart components (CartItem, CartSummary, CartIcon)
+│   ├── category/              # Category components
+│   ├── common/                # Shared components
+│   ├── filters/               # Filter components
+│   ├── layout/                # Layout components (Header, Footer)
+│   ├── product/               # Product components (ProductCard, ProductDetails)
+│   ├── products/              # Products listing components
+│   ├── skeletons/             # Loading skeletons
+│   └── ui/                    # UI primitives (Button, Pagination)
+├── lib/                       # Core utilities
+│   ├── api/                   # API client and product fetchers
+│   ├── schemas/               # Zod validation schemas
+│   ├── searchParams/          # URL state parsers (nuqs)
+│   └── utils/                 # Helper functions
+├── store/                     # State management
+│   └── cartStore.ts          # Zustand cart store with localStorage
+├── test/                      # Test utilities and setup
+└── types/                     # TypeScript type definitions
+```
+
+---
+
 ## 🧪 Testing
 
 ```bash
@@ -64,6 +96,9 @@ npm run test:coverage
 - **Persistent Shopping Cart** - Zustand with localStorage persistence, survives page refreshes
 - **Server-Side Filtering** - DummyJSON API endpoints for search/category filtering with URL state sync
 - **SEO Optimized** - Dynamic metadata, OpenGraph/Twitter cards, breadcrumbs, XML sitemap
+- **Next.js Image** - WebP/AVIF conversion, responsive srcsets, lazy loading, and fetchPriority for images above the
+  fold
+- **API Caching** - 24-hour revalidation
 
 ---
 
@@ -138,48 +173,6 @@ implementing.
 
 ---
 
-## 📁 Project Structure
 
-```
-src/
-├── app/                        # Next.js App Router pages
-│   ├── [category]/            # Category pages
-│   │   └── [productId]/       # Product detail pages
-│   ├── cart/                  # Shopping cart page
-│   └── categories/            # Categories listing page
-├── components/                 # React components
-│   ├── cart/                  # Cart components (CartItem, CartSummary, CartIcon)
-│   ├── category/              # Category components
-│   ├── common/                # Shared components
-│   ├── filters/               # Filter components
-│   ├── layout/                # Layout components (Header, Footer)
-│   ├── product/               # Product components (ProductCard, ProductDetails)
-│   ├── products/              # Products listing components
-│   ├── skeletons/             # Loading skeletons
-│   └── ui/                    # UI primitives (Button, Pagination)
-├── lib/                       # Core utilities
-│   ├── api/                   # API client and product fetchers
-│   ├── schemas/               # Zod validation schemas
-│   ├── searchParams/          # URL state parsers (nuqs)
-│   └── utils/                 # Helper functions
-├── store/                     # State management
-│   └── cartStore.ts          # Zustand cart store with localStorage
-├── test/                      # Test utilities and setup
-└── types/                     # TypeScript type definitions
-```
-
-**Tech Stack:** Tailwind CSS v4, DaisyUI v5 (14 themes), next-themes, nuqs for URL state
-
----
-
-## ⚡ Performance
-
-- **Static Generation** - All pages pre-built at build time with `generateStaticParams()`
-- **Next.js Image** - WebP/AVIF conversion, responsive srcsets, lazy loading, and fetchPriority for images above the
-  fold
-- **API Caching** - 24-hour revalidation
-- **Code Splitting** - Automatic with App Router
-
----
 
 Built with ❤️ for Arts Consolidated

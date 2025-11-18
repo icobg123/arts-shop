@@ -5,6 +5,8 @@ import React, {
 } from "react";
 import { Product } from "@/types/product";
 import { ProductCard } from "@/components/product/ProductCard";
+import { fetchAPI } from "@/lib/api/client";
+import { ProductListResponseSchema } from "@/lib/schemas/product.schema";
 
 interface RelatedProductsProps {
   category: string;
@@ -13,22 +15,18 @@ interface RelatedProductsProps {
 
 /**
  * Fetch related products from the same category
+ * Uses centralized fetchAPI with Zod validation
  */
 async function fetchRelatedProducts(
   category: string,
   excludeId: number
 ): Promise<Product[]> {
-  const response = await fetch(
+  const data = await fetchAPI(
     `https://dummyjson.com/products/category/${category}?limit=6`,
-    { next: { revalidate: 3600 } }
+    ProductListResponseSchema
   );
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch related products");
-  }
-
-  const data = await response.json();
-  return data.products.filter((p: Product) => p.id !== excludeId);
+  return data.products.filter((p) => p.id !== excludeId);
 }
 
 /**
