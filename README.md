@@ -35,6 +35,7 @@ npm run test:coverage
 ```
 
 **Test Suite:**
+
 - **248 tests** across cart store, components, schemas, and utilities
 - **97%+ coverage** (statements, branches, functions, lines)
 - **Vitest** with React Testing Library for component testing
@@ -87,24 +88,34 @@ npm run test:coverage
 **Assignment Requirement:** `/products/[id]`
 **Implementation:** `/[category]/[productId]`
 
-While the assignment specifies `/products/[id]`, I opted for a category-based route structure for several production-grade reasons:
+While the assignment specifies `/products/[id]`, I opted for a category-based route structure for several
+production-grade reasons:
 
 **SEO Benefits:**
-- **Semantic URLs** - `/smartphones/1` is more descriptive than `/products/1`, helping search engines understand content context
-- **Better crawlability** - Category-based paths create a logical hierarchy in the sitemap, improving how Google indexes the catalog
+
+- **Semantic URLs** - `/smartphones/1` is more descriptive than `/products/1`, helping search engines understand content
+  context
+- **Better crawlability** - Category-based paths create a logical hierarchy in the sitemap, improving how Google indexes
+  the catalog
 - **Keyword-rich URLs** - Including category names adds relevant keywords to the URL, boosting search rankings
 - **User-friendly** - URLs are more shareable and memorable (users can guess category structure)
 
 **Technical Advantages:**
-- **Automatic category filtering** - The route structure enables server-side category validation and automatic 404s for mismatched categories
+
+- **Automatic category filtering** - The route structure enables server-side category validation and automatic 404s for
+  mismatched categories
 - **Cleaner breadcrumbs** - Natural mapping from URL segments to navigation breadcrumbs
 - **RESTful patterns** - Follows REST conventions where resources are organized hierarchically
-- **Static generation optimization** - `generateStaticParams()` can pre-render all category/product combinations efficiently
+- **Static generation optimization** - `generateStaticParams()` can pre-render all category/product combinations
+  efficiently
 
 **Real-World Context:**
-Major e-commerce platforms (Amazon, eBay, Shopify stores) use similar patterns because it balances SEO, UX, and technical maintainability. The `/products/[id]` pattern works but misses these production benefits.
+Major e-commerce platforms (Amazon, eBay, Shopify stores) use similar patterns because it balances SEO, UX, and
+technical maintainability. The `/products/[id]` pattern works but misses these production benefits.
 
-**Trade-off Acknowledgment:** This deviates from the assignment spec, but demonstrates architectural thinking beyond just meeting requirements. In a production scenario, I would discuss this decision with the team/stakeholders before implementing.
+**Trade-off Acknowledgment:** This deviates from the assignment spec, but demonstrates architectural thinking beyond
+just meeting requirements. In a production scenario, I would discuss this decision with the team/stakeholders before
+implementing.
 
 ---
 
@@ -131,11 +142,30 @@ Major e-commerce platforms (Amazon, eBay, Shopify stores) use similar patterns b
 
 ```
 src/
-├── app/                # Next.js App Router (products, categories, cart)
-├── components/         # Product, cart, layout, UI components
-├── store/             # Zustand cart state with localStorage
-├── lib/               # API client, Zod schemas, URL state parsers
-└── types/             # TypeScript definitions
+├── app/                        # Next.js App Router pages
+│   ├── [category]/            # Category pages
+│   │   └── [productId]/       # Product detail pages
+│   ├── cart/                  # Shopping cart page
+│   └── categories/            # Categories listing page
+├── components/                 # React components
+│   ├── cart/                  # Cart components (CartItem, CartSummary, CartIcon)
+│   ├── category/              # Category components
+│   ├── common/                # Shared components
+│   ├── filters/               # Filter components
+│   ├── layout/                # Layout components (Header, Footer)
+│   ├── product/               # Product components (ProductCard, ProductDetails)
+│   ├── products/              # Products listing components
+│   ├── skeletons/             # Loading skeletons
+│   └── ui/                    # UI primitives (Button, Pagination)
+├── lib/                       # Core utilities
+│   ├── api/                   # API client and product fetchers
+│   ├── schemas/               # Zod validation schemas
+│   ├── searchParams/          # URL state parsers (nuqs)
+│   └── utils/                 # Helper functions
+├── store/                     # State management
+│   └── cartStore.ts          # Zustand cart store with localStorage
+├── test/                      # Test utilities and setup
+└── types/                     # TypeScript type definitions
 ```
 
 **Tech Stack:** Tailwind CSS v4, DaisyUI v5 (14 themes), next-themes, nuqs for URL state

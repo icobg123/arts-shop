@@ -1,7 +1,3 @@
-/**
- * API-related TypeScript types
- */
-
 export interface APIError extends Error {
   statusCode: number;
   details?: unknown;

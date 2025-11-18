@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import { ThemeSwitchSkeleton } from "./ThemeSwitchSkeleton";
 import { Moon, Sun } from "lucide-react";
-import { ICON_SIZE } from "@/constants/ui";
 import { cn } from "@/lib/utils/cn";
 
 interface ThemeSwitchProps {
@@ -42,10 +41,10 @@ export function ThemeSwitch({ className }: ThemeSwitchProps) {
       />
 
       {/* sun icon - shown in dark mode */}
-      <Sun size={ICON_SIZE} className="swap-off" />
+      <Sun className="swap-off size-4" />
 
       {/* moon icon - shown in light mode */}
-      <Moon size={ICON_SIZE} className="swap-on" />
+      <Moon className="swap-on size-4" />
     </label>
   );
 }
